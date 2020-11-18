@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import asyncHandler from 'express-async-handler';
@@ -23,6 +23,15 @@ mongoose
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+app.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
+  if (error.name === 'MongoError' && error.code === 11000) {
+    res.status(400).json({
+      success: false,
+      message: 'The name is already used',
+    });
+  }
+});
 
 // Routes
 app.post('/api/file/create', asyncHandler(FileController.create));
