@@ -3,3 +3,4 @@ node_modules
 build
 .prettierrc
 .eslintrc.json
+README.md
