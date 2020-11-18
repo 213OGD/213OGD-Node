@@ -1,6 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
-import FileModels from './models/FileModels';
 import FileController from './controllers/FileController';
 import asyncHandler from 'express-async-handler';
 
@@ -29,14 +28,12 @@ app.use(express.json());
 // Routes
 app.post('/api/file/create', asyncHandler(FileController.create));
 app.get('/api/file/list', asyncHandler(FileController.read));
-
-app.get('/', (req, res) => {
-  res.send('Hello World');
-});
-
+app.put('/api/file/update', asyncHandler(FileController.update));
+app.delete('/api/file/delete', asyncHandler(FileController.delete));
+app.get('/', (req, res) => res.send('Hello World'));
 app.get('*', (req, res) => {
   res.status(404);
-  res.send({ success: false, message: 'Wrong adress' });
+  res.send({ success: false, message: 'Wrong address' });
 });
 
 // Start Server
