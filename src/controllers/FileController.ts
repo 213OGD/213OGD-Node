@@ -1,14 +1,13 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { NextFunction, Request, Response } from 'express';
 import FileModels from '../models/FileModels';
 
 export default {
-  create: async (
-    req: Request,
-    res: Response,
-  ): Promise<void> => {
+  create: async (req: Request, res: Response): Promise<void> => {
     await FileModels.init();
     const file = new FileModels(req.body);
 
+    // eslint-disable-next-line no-console
     console.log(`Received ${file}`);
     const result = await file.save();
     res.json({ success: true, result });
