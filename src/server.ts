@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
-import FileController from './controllers/FileController';
 import asyncHandler from 'express-async-handler';
+import FileController from './controllers/FileController';
 
 const app = express();
 

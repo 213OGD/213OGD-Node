@@ -10,20 +10,20 @@ export default {
     await FileModels.init();
     const file = new FileModels(req.body);
 
-    console.log('Received ' + file);
+    console.log(`Received ${file}`);
     const result = await file.save();
-    res.json({ success: true, result: result });
+    res.json({ success: true, result });
   },
   read: async (req: Request, res: Response): Promise<void> => {
     const result = await FileModels.find();
-    res.json({ success: true, result: result });
+    res.json({ success: true, result });
   },
   update: async (req: Request, res: Response): Promise<void> => {
     const result = await FileModels.updateOne({ _id: req.body._id }, req.body);
-    res.json({ success: true, result: result });
+    res.json({ success: true, result });
   },
   delete: async (req: Request, res: Response): Promise<void> => {
     const result = await FileModels.deleteOne({ _id: req.body._id });
-    res.json({ success: true, result: result });
+    res.json({ success: true, result });
   },
 };
