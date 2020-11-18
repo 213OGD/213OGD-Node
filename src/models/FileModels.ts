@@ -1,10 +1,9 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 const FilesSchema = new Schema({
-    name: { type: String },
-    googleId: { type: String},
-    tags: {type: Array}
-})
+  googleId: { type: String, unique: true },
+  tags: { type: Array },
+});
 
-export default mongoose.model('Files', FilesSchema)
+export default mongoose.model('Files', FilesSchema);

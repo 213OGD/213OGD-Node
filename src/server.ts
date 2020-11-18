@@ -1,21 +1,20 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express from 'express';
 import mongoose from 'mongoose';
-import FileController from './controllers/FileController';
+import dotenv from 'dotenv';
 import asyncHandler from 'express-async-handler';
+import FileController from './controllers/FileController';
 
 const app = express();
+dotenv.config();
 
 // Database
 mongoose
-  .connect(
-    'mongodb+srv://213OGD:fK0uRT1SJ5bk@cluster213.l0oyn.mongodb.net/files?retryWrites=true&w=majority',
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-      autoIndex: true,
-    }
-  )
+  .connect(`${process.env.MONGO_URI}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    autoIndex: true,
+  })
   // eslint-disable-next-line no-console
   .then(() => console.log('Connected to database'))
   // eslint-disable-next-line no-console
@@ -37,5 +36,7 @@ app.get('*', (req, res) => {
 });
 
 // Start Server
-// eslint-disable-next-line no-console
-app.listen(5000, () => console.log('Server started on http://localhost:5000'));
+app.listen(process.env.PORT, () =>
+  // eslint-disable-next-line no-console
+  console.log(`Server started on http://localhost:${process.env.PORT}`)
+);
