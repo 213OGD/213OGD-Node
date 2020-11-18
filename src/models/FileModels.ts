@@ -2,8 +2,7 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 const FilesSchema = new Schema({
-  name: { type: String },
-  googleId: { type: String },
+  googleId: { type: String, unique: true },
   tags: { type: Array },
 });
 
