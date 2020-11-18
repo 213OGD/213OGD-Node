@@ -1,6 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
-import Files from './models/FileModels';
+import FileModels from './models/FileModels';
+import FileController from './controllers/FileController';
+import asyncHandler from 'express-async-handler';
 
 const app = express();
 
@@ -24,17 +26,11 @@ mongoose
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-function saveDoc() {
-  let doc1 = new Files({ name: 'test', googleId: '1', tags: ['test'] });
-  doc1.save(function (err, doc) {
-    if (err) return console.error(err);
-    console.log('Document inserted');
-  });
-}
-
 // Routes
+app.post('/api/file/create', asyncHandler(FileController.create));
+app.get('/api/file/list', asyncHandler(FileController.read));
+
 app.get('/', (req, res) => {
-  saveDoc();
   res.send('Hello World');
 });
 
