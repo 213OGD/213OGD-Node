@@ -4,7 +4,10 @@ import asyncHandler from 'express-async-handler';
 
 import { connect, disconnect } from './database/database';
 
+import mongoose from 'mongoose';
+
 import FileController from './controllers/FileController';
+import AdminController from './controllers/AdminController';
 
 const app = express();
 
@@ -36,11 +39,22 @@ app.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
 });
 
 // Routes
+//Get Datas from Google API
+app.get('/admin/saveFiles', asyncHandler(AdminController.create));
+
+// BDD Create
 app.post('/api/file/create', asyncHandler(FileController.create));
+// BDD Get list of files
 app.get('/api/file/list', asyncHandler(FileController.read));
+
+// BDD Update
+
 app.put('/api/file/update', asyncHandler(FileController.update));
+// BDD Delete
 app.delete('/api/file/delete', asyncHandler(FileController.delete));
+// Hello World
 app.get('/', (req, res) => res.send('Hello World'));
+// Appeler si aucune route = 404
 app.get('*', (req, res) => {
   res.status(404);
   res.send({ success: false, message: 'Wrong address' });
