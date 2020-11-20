@@ -2,9 +2,6 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 const FilesSchema = new Schema({
-
-export default mongoose.model('FileModels', FilesSchema);
-
   googleId: { type: String, unique: true, required: true },
   name: { type: String, required: true },
   webViewLink: { type: String, required: true },
