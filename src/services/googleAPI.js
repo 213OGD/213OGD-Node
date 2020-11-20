@@ -17,7 +17,7 @@ async function getGoogleFiles(){
   //   return authorize(JSON.parse(content), listFiles);
   // });
 
-  const content = fs.readFileSync('src/credentials.json');
+  const content = fs.readFileSync('credentials.json');
   return authorize(JSON.parse(content), listFiles);
 }
 
@@ -101,8 +101,8 @@ function listFiles(auth) {
         // eslint-disable-next-line array-callback-return
         files.map((file) => {
           // recupere tout l'objet drive document avec toute ses information. voir file.json
-          console.log(FileModels);
-          let newFile = new FileModels.default(file);
+          console.log(file);
+          let newFile = new FileModels.default({ googleId: file.id, ...file });
           newFile.save(function(err, doc){
             if(err) return console.error(err);
             console.log("Document inserted");

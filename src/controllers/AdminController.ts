@@ -1,6 +1,5 @@
-
 import { Request, Response } from 'express';
-    // @ts-ignore
+// @ts-ignore
 import getGoogleFiles from '../services/googleAPI';
 
 import FileModels from '../models/FileModels';
@@ -12,11 +11,13 @@ export default {
     // const file = new FileModels(req.body);
     // getGoogleFiles();
 
-    getGoogleFiles().then((result: any) => console.log('res:', result));
+    const goo = getGoogleFiles().then((result: any) =>
+      console.log('res:', result)
+    );
     // eslint-disable-next-line no-console
     // console.log(`Received ${file}`);
-      // @ts-ignore
-      const result = [];
+    // @ts-ignore
+    const result = goo;
     // @ts-ignore
     res.json({ success: true, result });
   },
