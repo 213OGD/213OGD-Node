@@ -1,10 +1,10 @@
 import express, { Request, Response, NextFunction } from 'express';
 import 'dotenv/config';
+import cors from 'cors';
 import asyncHandler from 'express-async-handler';
 
 import { connect, disconnect } from './database/database';
 
-import mongoose from 'mongoose';
 
 import FileController from './controllers/FileController';
 import AdminController from './controllers/AdminController';
@@ -16,6 +16,8 @@ connect(`${process.env.MONGO_URI}`);
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors());
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
 app.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
   if (error.name === 'MongoError' && error.code === 11000) {
