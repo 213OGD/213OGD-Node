@@ -39,7 +39,6 @@ app.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
 //Get Datas from Google API
 app.get('/admin/saveFiles', asyncHandler(AdminController.create));
 
-
 // BDD Create
 app.post('/api/file/create', asyncHandler(FileController.create));
 // BDD Get list of files
