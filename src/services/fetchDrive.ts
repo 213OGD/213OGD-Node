@@ -40,10 +40,9 @@ async function listFiles(auth: typeof JWT) {
       const files = res?.data.files;
 
       if (files?.length) {
-        files.map((file) => {
+        files.forEach((file) => {
           // eslint-disable-next-line no-console
           console.log(file.id);
-          return file;
         });
       } else {
         // eslint-disable-next-line no-console
