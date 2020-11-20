@@ -1,26 +1,17 @@
 import express, { Request, Response, NextFunction } from 'express';
-import dotenv from 'dotenv';
+import 'dotenv/config';
 import asyncHandler from 'express-async-handler';
+
+import { connect, disconnect } from './database/database';
+
 import mongoose from 'mongoose';
+
 import FileController from './controllers/FileController';
 import AdminController from './controllers/AdminController';
 
 const app = express();
 
-dotenv.config();
-
-// DATABASE
-mongoose
-  .connect(`${process.env.MONGO_URI}`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    autoIndex: true,
-  })
-  // eslint-disable-next-line no-console
-  .then(() => console.log('Connected to database'))
-  // eslint-disable-next-line no-console
-  .catch((err: Error) => console.log(err.message));
+connect(`${process.env.MONGO_URI}`);
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -43,7 +34,9 @@ app.get('/admin/saveFiles', asyncHandler(AdminController.create));
 app.post('/api/file/create', asyncHandler(FileController.create));
 // BDD Get list of files
 app.get('/api/file/list', asyncHandler(FileController.read));
+
 // BDD Update
+
 app.put('/api/file/update', asyncHandler(FileController.update));
 // BDD Delete
 app.delete('/api/file/delete', asyncHandler(FileController.delete));

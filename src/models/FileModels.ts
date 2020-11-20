@@ -9,4 +9,5 @@ const FilesSchema = new Schema({
   tags: { type: Array },
 });
 
-export default mongoose.model('file', FilesSchema);
+export default mongoose.model('File', FilesSchema);
+
