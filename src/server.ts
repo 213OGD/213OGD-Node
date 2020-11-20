@@ -12,18 +12,6 @@ import AdminController from './controllers/AdminController';
 const app = express();
 
 connect(`${process.env.MONGO_URI}`);
-// DATABASE
-// mongoose
-//   .connect(`${process.env.MONGO_URI}`, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     useCreateIndex: true,
-//     autoIndex: true,
-//   })
-//   // eslint-disable-next-line no-console
-//   .then(() => console.log('Connected to database'))
-//   // eslint-disable-next-line no-console
-//   .catch((err: Error) => console.log(err.message));
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
