@@ -1,59 +1,41 @@
 import { ApolloServer, gql } from 'apollo-server';
+import 'dotenv/config';
+import connect from './database/database';
+import FileModels from './models/FileModels';
+
+export type FileType = {
+  googleID: string;
+  name: string;
+  webViewLink: string;
+  iconLink: string;
+  tags: [string];
+};
 
 const typeDefs = gql`
-  # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
-
-  # This "Book" type defines the queryable fields for every book in our data source.
-  type Book {
-    title: String
-    author: String
+  type File {
+    googleId: String
+    name: String
+    webViewLink: String
+    iconLink: String
+    tags: [String]
   }
 
   # The "Query" type is special: it lists all of the available queries that
   # clients can execute, along with the return type for each. In this
   # case, the "books" query returns an array of zero or more Books (defined above).
   type Query {
-    books: [Book]
+    files: [File]
   }
 `;
-
-const datas = [
-  {
-    id: '1',
-    name: 'Backlog du POC',
-    webViewLink:
-      'https://docs.google.com/spreadsheets/d/1GBkzbQEGAU7lONfR_AQDPTde4-GodcfT_Xqb2-V6sUg/edit?usp=drivesdk',
-    iconLink:
-      'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.spreadsheet',
-    tags: ['SCRUM', 'react', 'node'],
-  },
-  {
-    id: '2',
-    name: 'Test',
-    webViewLink:
-      'https://docs.google.com/spreadsheets/d/1GBkzbQEGAU7lONfR_AQDPTde4-GodcfT_Xqb2-V6sUg/edit?usp=drivesdk',
-    iconLink:
-      'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.spreadsheet',
-    tags: ['SCRUM', 'react', 'node'],
-  },
-];
-
-const books = [
-  {
-    title: 'The Awakening',
-    author: 'Kate Chopin',
-  },
-  {
-    title: 'City of Glass',
-    author: 'Paul Auster',
-  },
-];
 
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
   Query: {
-    books: () => datas,
+    files: async () => {
+      const files = await FileModels.find();
+      return files;
+    },
   },
 };
 
@@ -61,6 +43,7 @@ const resolvers = {
 // definition and your set of resolvers.
 const server = new ApolloServer({ typeDefs, resolvers });
 
+connect(`${process.env.MONGO_URI}`);
 // The `listen` method launches a web server.
 server.listen().then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);

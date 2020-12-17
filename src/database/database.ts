@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-export const connect = (uri: string): void => {
+const connect = (uri: string): void => {
   mongoose
     .connect(uri, {
       useNewUrlParser: true,
