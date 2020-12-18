@@ -1,57 +1,50 @@
-import express, { Request, Response, NextFunction } from 'express';
+import { ApolloServer, gql } from 'apollo-server';
 import 'dotenv/config';
-import cors from 'cors';
-import asyncHandler from 'express-async-handler';
+import connect from './database/database';
+import FileModels from './models/FileModels';
 
-import { connect, disconnect } from './database/database';
+export type FileType = {
+  googleID: string;
+  name: string;
+  webViewLink: string;
+  iconLink: string;
+  tags: [string];
+};
 
+const typeDefs = gql`
+  type File {
+    googleId: String
+    name: String
+    webViewLink: String
+    iconLink: String
+    tags: [String]
+  }
 
-import FileController from './controllers/FileController';
-import AdminController from './controllers/AdminController';
+  # The "Query" type is special: it lists all of the available queries that
+  # clients can execute, along with the return type for each. In this
+  # case, the "books" query returns an array of zero or more Books (defined above).
+  type Query {
+    files: [File]
+  }
+`;
 
-const app = express();
+// Resolvers define the technique for fetching the types defined in the
+// schema. This resolver retrieves books from the "books" array above.
+const resolvers = {
+  Query: {
+    files: async () => {
+      const files = await FileModels.find();
+      return files;
+    },
+  },
+};
+
+// The ApolloServer constructor requires two parameters: your schema
+// definition and your set of resolvers.
+const server = new ApolloServer({ typeDefs, resolvers });
 
 connect(`${process.env.MONGO_URI}`);
-
-// Middleware
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(cors());
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-app.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
-  if (error.name === 'MongoError' && error.code === 11000) {
-    res.status(400).json({
-      success: false,
-      message: 'The name is already used',
-    });
-  }
+// The `listen` method launches a web server.
+server.listen().then(({ url }) => {
+  console.log(`🚀  Server ready at ${url}`);
 });
-
-// Routes
-//Get Datas from Google API
-app.get('/admin/saveFiles', asyncHandler(AdminController.create));
-
-// BDD Create
-app.post('/api/file/create', asyncHandler(FileController.create));
-// BDD Get list of files
-app.get('/api/file/list', asyncHandler(FileController.read));
-
-// BDD Update
-
-app.put('/api/file/update', asyncHandler(FileController.update));
-// BDD Delete
-app.delete('/api/file/delete', asyncHandler(FileController.delete));
-// Hello World
-app.get('/', (req, res) => res.send('Hello World'));
-// Appeler si aucune route = 404
-app.get('*', (req, res) => {
-  res.status(404);
-  res.send({ success: false, message: 'Wrong address' });
-});
-
-// Start Server
-app.listen(process.env.PORT, () =>
-  // eslint-disable-next-line no-console
-  console.log(`Server started on http://localhost:${process.env.PORT}`)
-);
