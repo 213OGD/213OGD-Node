@@ -1,54 +1,68 @@
-import { google } from 'googleapis';
+import { drive_v3, google } from 'googleapis';
 
-const keyFile = require('./credz.json');
+import * as keyFile from './odg-296009-7dd1f2235876.json';
 
-const JWT = new google.auth.JWT(
-  keyFile.client_email,
-  './credz.json',
-  keyFile.private_key,
-  ['https://www.googleapis.com/auth/drive'],
-  undefined,
-  keyFile.private_key_id
-);
+export default class FetchDrive {
+  public JWT = new google.auth.JWT(
+    keyFile.client_email,
+    undefined,
+    keyFile.private_key,
+    ['https://www.googleapis.com/auth/drive'],
+    undefined,
+    keyFile.private_key_id
+  );
 
-JWT.authorize((authErr) => {
-  // eslint-disable-next-line no-console
-  if (authErr) console.log('error : ', authErr);
-  // eslint-disable-next-line no-console
-  console.log('Authorization accorded');
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  listFiles(JWT);
-});
-
-/**
- * Lists the names and IDs of up to 10 files.
- */
-async function listFiles(auth: typeof JWT) {
-  const drive = google.drive({
-    version: 'v3',
-    auth,
-  });
-
-  await drive.files.list(
-    {
-      pageSize: 10,
-      fields: 'nextPageToken, files(id, name, webViewLink, iconLink, mimeType)',
-    },
-    (err, res) => {
-      if (err) return console.log(`The API returned an error: ${err}`);
-
-      const files = res?.data.files;
-
-      if (files?.length) {
-        files.forEach((file) => {
-          // eslint-disable-next-line no-console
-          console.log(file.id);
-        });
+  constructor() {
+    this.JWT.authorize((authErr) => {
+      // eslint-disable-next-line no-console
+      if (authErr) {
+        console.log('error : ', authErr);
       } else {
         // eslint-disable-next-line no-console
-        console.log('No files found.');
+        console.log('Authorization accorded');
       }
-      return files;
-    }
-  );
+    });
+  }
+
+  /**
+   * Lists the names and IDs of up to 10 files.
+   */
+  async listFiles(): Promise<drive_v3.Schema$File[] | undefined> {
+    const drive = google.drive({
+      version: 'v3',
+      auth: this.JWT,
+    });
+
+    return new Promise((resolve, reject) => {
+      drive.files.list(
+        {
+          pageSize: 10,
+          fields:
+            'nextPageToken, files(id, name, webViewLink, iconLink, mimeType)',
+        },
+        (err, res) => {
+          if (err) {
+            reject(err);
+          } else {
+            const files = res?.data.files;
+            if (files?.length) {
+              resolve(files);
+            } else {
+              // eslint-disable-next-line no-console
+              console.log('No files found.');
+            }
+          }
+        }
+      );
+    });
+  }
 }
+
+/* const start = async () => {
+  let test = new FetchDrive();
+
+  const files = await test.listFiles();
+  console.log(files);
+};
+
+start(); */
