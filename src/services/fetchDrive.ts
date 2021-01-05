@@ -1,6 +1,6 @@
 import { drive_v3, google } from 'googleapis';
 
-import * as keyFile from './odg-296009-7dd1f2235876.json';
+import * as keyFile from '../credentials.json';
 
 export default class FetchDrive {
   public JWT = new google.auth.JWT(
