@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+  server:
+    image: 213ogd/server
+    build:
+      context: .
+    volumes:
+      - .:/app
+    ports: 
+      - "4000:4000"
+    container_name: server
