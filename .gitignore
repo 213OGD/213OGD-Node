@@ -4,3 +4,4 @@ build/
 .idea
 /src/credentials.json
 odg-*
+package-lock.json
