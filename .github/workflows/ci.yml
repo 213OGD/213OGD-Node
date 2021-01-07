@@ -16,6 +16,13 @@ jobs:
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       -
+        name: Environment
+        run: |
+          touch .env
+          echo "PORT=5000" >> .env
+          echo "MONGO_URI=mongodb+srv://213OGD:fK0uRT1SJ5bk@cluster213.l0oyn.mongodb.net/files?retryWrites=true&w=majority" >> .env
+          cat .env
+      -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       -
