@@ -14,13 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       -
-        name: Environment
-        run: |
-          touch .env
-          echo "PORT=5000" >> .env
-          echo "MONGO_URI=mongodb+srv://213OGD:fK0uRT1SJ5bk@cluster213.l0oyn.mongodb.net/files?retryWrites=true&w=majority" >> .env
-          cat .env
-      -
         name: Login to DockerHub
         uses: docker/login-action@v1 
         with:
@@ -29,6 +22,10 @@ jobs:
       -
         name: Build and push
         run: |
+          touch .env
+          echo "PORT=5000" >> .env
+          echo "MONGO_URI=mongodb+srv://213OGD:fK0uRT1SJ5bk@cluster213.l0oyn.mongodb.net/files?retryWrites=true&w=majority" >> .env
+          cat .env
           ls
           docker build -t 213ogd/server .
           docker push 213ogd/server
