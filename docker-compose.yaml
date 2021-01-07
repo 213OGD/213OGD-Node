@@ -9,3 +9,6 @@ services:
     ports: 
       - "4000:4000"
     container_name: server
+    environment:
+      - PORT=${PORT}
+      - MONGO_URI=${MONGO_URI}

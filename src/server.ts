@@ -13,6 +13,7 @@ export type FileType = {
 
 const typeDefs = gql`
   type File {
+    _id: String
     googleId: String
     name: String
     webViewLink: String
