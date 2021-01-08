@@ -5,10 +5,10 @@ services:
     build:
       context: .
     volumes:
-      - .:/app
+      - ./src:/app/src
     ports: 
-      - "4000:4000"
-    container_name: server
+      - "2000:4000"
+    container_name: 213ogd-server
     environment:
       - PORT=${PORT}
       - MONGO_URI=${MONGO_URI}

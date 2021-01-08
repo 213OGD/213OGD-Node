@@ -47,5 +47,5 @@ const server = new ApolloServer({ typeDefs, resolvers });
 connect(`${process.env.MONGO_URI}`);
 // The `listen` method launches a web server.
 server.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
+  console.log(`🚀 Server ready at ${url}`);
 });
