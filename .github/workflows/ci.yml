@@ -24,7 +24,7 @@ jobs:
         run: |
           touch .env
           echo "PORT=5000" >> .env
-          echo "MONGO_URI=mongodb+srv://213OGD:fK0uRT1SJ5bk@cluster213.l0oyn.mongodb.net/files?retryWrites=true&w=majority" >> .env
+          echo "MONGO_URI=${{ secrets.MONGO_URL }}" >> .env
           cat .env
           ls
           docker build -t 213ogd/server .
