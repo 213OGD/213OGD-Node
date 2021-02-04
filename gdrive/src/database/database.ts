@@ -9,7 +9,7 @@ const connect = (uri: string): void => {
       autoIndex: true,
     })
     // eslint-disable-next-line no-console
-    .then(() => console.log('Connected to database'))
+    .then(() => console.log('GDDrive: Connected to database'))
     // eslint-disable-next-line no-console
     .catch((err: Error) => console.log(err.message, ' ', `${uri}`));
 };

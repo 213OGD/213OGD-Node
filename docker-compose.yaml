@@ -1,14 +1,41 @@
 version: '3.3'
 services:
-  server:
-    image: 213ogd/server
+  gdrive:
+    image: 213ogd/gdrive
     build:
-      context: .
+      context: gdrive
+      # dockerfile: ./gdrive/Dockerfile
     volumes:
-      - ./src:/app/src
+      - ./gdrive/src:/app/src
     ports: 
-      - "2000:4000"
-    container_name: 213ogd-server
-    environment:
-      - PORT=${PORT}
-      - MONGO_URI=${MONGO_URI}
+      - "4000:4000"
+    container_name: 213ogd-gdrive
+    # environment:
+    #   - PORT=${PORT}
+    #   - MONGO_URI=${MONGO_URI}
+    networks: 
+      - microservices
+
+  login:
+    image: 213ogd/login
+    build:
+      context: login
+      # dockerfile: ./login/Dockerfile
+    ports: 
+      - "5000:5000"
+    # environment:
+    #   - PORT=${PORT}
+    networks: 
+      - microservices
+
+  loginmongo:
+    image: mongo
+    volumes:
+      - loginmongo:/data/db:rw
+    networks: 
+      - microservices
+
+volumes: 
+  loginmongo:
+networks:
+  microservices:

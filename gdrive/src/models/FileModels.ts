@@ -10,4 +10,3 @@ const FilesSchema = new Schema({
 });
 
 export default mongoose.model('File', FilesSchema);
-

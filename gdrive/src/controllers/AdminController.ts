@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-// @ts-ignore
-import getGoogleFiles from '../services/googleAPI';
+// eslint-disable-next-line import/extensions
+import getGoogleFiles from '../services/fetchDrive';
 
 import FileModels from '../models/FileModels';
 
