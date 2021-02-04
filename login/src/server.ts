@@ -1,4 +1,5 @@
 import { ApolloServer, gql } from 'apollo-server';
+import 'dotenv/config';
 import connect from './database/database';
 import UserModel from './models/UserModel';
 
@@ -8,7 +9,7 @@ export type UserType = {
     password: string;
 }
 
-const typeUsers = gql`
+const typeDefs = gql`
     type User {
         _id: ID
         username: String
@@ -32,7 +33,7 @@ const resolvers = {
   },
 };
 
-const server = new ApolloServer({ typeUsers, resolvers });
+const server = new ApolloServer({ typeDefs, resolvers });
 
 connect(`${process.env.MONGO_URI}`);
 server.listen().then(({ url }) => {
