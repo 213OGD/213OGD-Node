@@ -1,5 +1,14 @@
 import mongoose from 'mongoose';
 
+export interface Ifile {
+  _id: string;
+  googleId: string;
+  name: string;
+  webViewLink: string;
+  iconLink: string;
+  tags: [string];
+}
+
 const { Schema } = mongoose;
 const FilesSchema = new Schema({
   googleId: { type: String, unique: true, required: true },
@@ -10,4 +19,3 @@ const FilesSchema = new Schema({
 });
 
 export default mongoose.model('File', FilesSchema);
-

@@ -1,26 +1,37 @@
-import { Request, Response } from 'express';
-
 import FileModels from '../models/FileModels';
 
+export interface Ifile {
+  _id: string;
+  googleId: string;
+  name: string;
+  webViewLink: string;
+  iconLink: string;
+  tags: [string];
+}
+
 export default {
-  create: async (req: Request, res: Response): Promise<void> => {
+  /**
+   * TO DO interface file to type the return
+   * @param body
+   */
+  create: async (body: Ifile): Promise<Ifile> => {
     await FileModels.init();
-    const file = new FileModels(req.body);
+    const file = new FileModels(body);
     const result = await file.save();
-    res.json({ success: true, result });
+    return result;
   },
-  read: async (req: Request, res: Response): Promise<void> => {
-    const result = await FileModels.find();
-    res.json({ success: true, result });
+  read: async (): Promise<Ifile> => {
+    const files = await FileModels.find();
+    return files;
   },
-  update: async (req: Request, res: Response): Promise<void> => {
+  update: async (body: Ifile): Promise<Ifile> => {
     // eslint-disable-next-line no-underscore-dangle
-    const result = await FileModels.updateOne({ _id: req.body._id }, req.body);
-    res.json({ success: true, result });
+    const result = await FileModels.updateOne({ _id: body._id }, body);
+    return result;
   },
-  delete: async (req: Request, res: Response): Promise<void> => {
+  delete: async (body: Ifile): Promise<Ifile> => {
     // eslint-disable-next-line no-underscore-dangle
-    const result = await FileModels.deleteOne({ _id: req.body._id });
-    res.json({ success: true, result });
+    const result = await FileModels.deleteOne({ _id: body._id });
+    return result;
   },
 };
