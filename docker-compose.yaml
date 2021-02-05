@@ -17,14 +17,16 @@ services:
       - microservices
 
   auth:
-    image: 213ogd/login
+    image: 213ogd/auth
     build:
-      context: login
-      # dockerfile: ./login/Dockerfile
+      context: auth
+      # dockerfile: ./auth/Dockerfile
     ports: 
       - "5000:4000"
     # environment:
     #   - PORT=${PORT}
+    volumes: 
+      - ./auth/src:/app/src
     networks: 
       - microservices
     depends_on: 
@@ -32,12 +34,14 @@ services:
 
   authmongo:
     image: mongo
+    ports:
+      - "27017:27017"
     volumes:
-      - loginmongo:/data/db:rw
+      - authmongo:/data/db:rw
     networks: 
       - microservices
 
 volumes: 
-  loginmongo:
+  authmongo:
 networks:
   microservices:

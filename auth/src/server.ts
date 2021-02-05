@@ -4,6 +4,7 @@ import connect from './database/database';
 import UserModel from './models/UserModel';
 
 export type UserType = {
+    _id: string;
     username: string;
     mail: string;
     password: string;
@@ -20,10 +21,21 @@ const typeDefs = gql`
         users: [User]
     }
 
-    type Mutators {
-        addUser(username: String!, mail: String!, password: String!) : [User]
+    type Mutation {
+      addUser(username: String!, mail: String!, password: String!) : User
     }
 `;
+
+// type Mutation {
+//   addUser(User: UserInput) : User
+// }
+
+// input UserInput {
+// username: String
+// mail: String
+// password: String
+// }
+
 const resolvers = {
   Query: {
     users: async () => {
@@ -31,6 +43,12 @@ const resolvers = {
       return users;
     },
   },
+  Mutation: {
+    addUser: async (username: string, mail: string, password: string) => {
+      const addUser = new UserModel({username, mail, password})
+      return await addUser.save();
+    }
+  }
 };
 
 const server = new ApolloServer({ typeDefs, resolvers });
