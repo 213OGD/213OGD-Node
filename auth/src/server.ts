@@ -22,10 +22,19 @@ const typeDefs = gql`
     }
 
     type Mutation {
-      addUser(username: String!, mail: String!, password: String!) : User
+      addUser(user: UserInput) : User
+    }
+
+    input UserInput{
+      username: String
+      mail: String
+      password: String
     }
 `;
 
+// type Mutation {
+//   addUser(username: String!, mail: String!, password: String!) : User!
+// }
 // type Mutation {
 //   addUser(User: UserInput) : User
 // }
@@ -44,11 +53,13 @@ const resolvers = {
     },
   },
   Mutation: {
-    addUser: async (username: string, mail: string, password: string) => {
-      const addUser = new UserModel({username, mail, password})
-      return await addUser.save();
-    }
-  }
+    addUser: async (_:unknown, user: any) => {
+      const addUser = await UserModel.create(user.user);
+      console.log('log', addUser);
+      // return await addUser.save();
+      return addUser;
+    },
+  },
 };
 
 const server = new ApolloServer({ typeDefs, resolvers });
