@@ -1,8 +1,13 @@
-import FileQuery from './file.resolver';
+import { TagMutation } from './tag.resolver';
+import { FileQuery } from './file.resolver';
 
-const resolver = {
+const resolvers = {
   Query: {
     ...FileQuery,
   },
-  Mutation: {},
+  Mutation: {
+    ...TagMutation,
+  },
 };
+
+export { resolvers };

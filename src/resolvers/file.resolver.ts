@@ -1,15 +1,16 @@
 import FileModels from '../models/FileModels';
-// import { find, filter } from 'lodash';
 
 const FileQuery = {
-  getFiles: async (): Promise<any> => {
-    const files = await FileModels.find({});
+  async files(): Promise<unknown> {
+    const files = await FileModels.find();
+    console.log('files', files);
     return files;
   },
-  getFile: async (id: string): Promise<any> => {
+  async file(id: string): Promise<unknown> {
     const file = await FileModels.find({ id });
+    console.log(file);
     return file;
   },
 };
 
-export default FileQuery;
+export { FileQuery };
