@@ -11,10 +11,11 @@ interface FileInput extends Document {
 const TagMutation = {
   async updateTag(_: unknown, args: FileInput): Promise<any> {
     const { file } = args;
+    // eslint-disable-next-line no-underscore-dangle
     console.log(file._id);
     const updatedTag = await FileModels.findOneAndUpdate(
       { _id: file._id },
-      { tags: file.tags }
+      { $addToSet: { tags: file.tags } }
     );
     console.log(updatedTag);
     //console.log('updateTag => ', updatedTag); 
