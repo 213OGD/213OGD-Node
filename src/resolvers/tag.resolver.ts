@@ -9,17 +9,14 @@ interface FileInput extends Document {
 }
 
 const TagMutation = {
-  async updateTag(_: unknown, args: FileInput): Promise<any> {
+  async updateTag(_: unknown, args: FileInput): Promise<unknown> {
     const { file } = args;
-    // eslint-disable-next-line no-underscore-dangle
-    console.log(file._id);
     const updatedTag = await FileModels.findOneAndUpdate(
+      // eslint-disable-next-line no-underscore-dangle
       { _id: file._id },
-      { $addToSet: { tags: file.tags } }
+      { $addToSet: { tags: file.tags } },
+      { new: true }
     );
-    console.log(updatedTag);
-    //console.log('updateTag => ', updatedTag); 
-    // eslint-disable-next-line no-console
     return updatedTag;
   },
 };

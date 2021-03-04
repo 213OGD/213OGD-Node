@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const connect = (uri: string): void => {
+  mongoose.set('useFindAndModify', false);
   mongoose
     .connect(uri, {
       useNewUrlParser: true,

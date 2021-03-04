@@ -1,8 +1,10 @@
-import { ApolloServer, gql } from 'apollo-server';
+import { ApolloServer } from 'apollo-server';
+import { readFileSync } from 'fs';
 import 'dotenv/config';
 import connect from './database/database';
 // import FileModels from './models/FileModels';
 import { resolvers } from './resolvers/resolver';
+
 
 export type FileType = {
   googleID: string;
@@ -12,45 +14,7 @@ export type FileType = {
   tags: [string];
 };
 
-const typeDefs = gql`
-  type File {
-    _id: String
-    googleId: String
-    name: String
-    webViewLink: String
-    iconLink: String
-    tags: [String]
-  }
-
-  input tagInput {
-    tags: [String]
-  }
-
-  input fileInput {
-    _id: String
-    tags: [String]
-  }
-
-  type Query {
-    file: File
-    files: [File]
-  }
-
-  type Mutation {
-    updateTag(file: fileInput): File
-  }
-`;
-
-// Resolvers define the technique for fetching the types defined in the
-// schema. This resolver retrieves books from the "books" array above.
-// const resolvers = {
-//   Query: {
-//     files: async () => {
-//       const files = await FileModels.find();
-//       return files;
-//     },
-//   },
-// };
+const typeDefs = readFileSync('src/graphql/schema.graphql').toString('utf-8');
 
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
