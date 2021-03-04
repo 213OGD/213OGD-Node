@@ -19,5 +19,15 @@ const TagMutation = {
     );
     return updatedTag;
   },
+  async deleteTag(_: unknown, args: FileInput): Promise<any> {
+    const { file } = args;
+    const { tags } = file;
+    const deleteTag = await FileModels.updateOne(
+      { _id: file._id },
+      { $pull: { tags: { $in: tags } } },
+      { multi: true }
+    );
+    return deleteTag;
+  },
 };
 export { TagMutation };

@@ -23,4 +23,5 @@ type Query {
 
 type Mutation {
     updateTag(file: fileInput): File
+    deleteTag(file: fileInput): File
 }
