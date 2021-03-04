@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 import 'dotenv/config';
 import connect from './database/database';
 // import FileModels from './models/FileModels';
-import { resolvers } from './resolvers/resolver';
+import resolvers from './resolvers/resolver';
 
 
 export type FileType = {

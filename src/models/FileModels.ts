@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
-export interface Ifile {
+export interface Ifile extends Document {
   _id: string;
   googleId: string;
   name: string;
@@ -18,4 +18,4 @@ const FilesSchema = new Schema({
   tags: { type: Array },
 });
 
-export default mongoose.model('File', FilesSchema);
+export default mongoose.model<Ifile>('File', FilesSchema);

@@ -1,14 +1,14 @@
-import FileModels from '../models/FileModels';
+import FileModels, { Ifile } from '../models/FileModels';
 
 const FileQuery = {
-  async files(): Promise<unknown> {
+  async files(): Promise<Ifile[]> {
     const files = await FileModels.find();
     return files;
   },
-  async file(id: string): Promise<unknown> {
+  async file(id: string): Promise<Ifile[]> {
     const file = await FileModels.find({ id });
     return file;
   },
 };
 
-export { FileQuery };
+export default FileQuery;

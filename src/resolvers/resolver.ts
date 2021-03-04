@@ -1,5 +1,5 @@
-import { TagMutation } from './tag.resolver';
-import { FileQuery } from './file.resolver';
+import TagMutation from './tag.resolver';
+import FileQuery from './file.resolver';
 
 const resolvers = {
   Query: {
@@ -10,4 +10,4 @@ const resolvers = {
   },
 };
 
-export { resolvers };
+export default resolvers;

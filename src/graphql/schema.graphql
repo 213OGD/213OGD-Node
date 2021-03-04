@@ -8,12 +8,8 @@ type File {
 }
 
 input tagInput {
-    tags: [String]
-}
-
-input fileInput {
-    _id: String
-    tags: [String]
+    idFile: String
+    tag: String
 }
 
 type Query {
@@ -22,6 +18,6 @@ type Query {
 }
 
 type Mutation {
-    updateTag(file: fileInput): File
-    deleteTag(file: fileInput): File
+    addTag(tagInput: tagInput): File
+    deleteTag(tagInput: tagInput): File
 }
