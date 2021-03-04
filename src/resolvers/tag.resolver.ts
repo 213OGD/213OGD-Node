@@ -22,10 +22,10 @@ const TagMutation = {
   async deleteTag(_: unknown, args: FileInput): Promise<any> {
     const { file } = args;
     const { tags } = file;
-    const deleteTag = await FileModels.updateOne(
+    const deleteTag = await FileModels.findByIdAndUpdate(
       { _id: file._id },
       { $pull: { tags: { $in: tags } } },
-      { multi: true }
+      { multi: true, new: true }
     );
     return deleteTag;
   },

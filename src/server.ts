@@ -19,7 +19,6 @@ const typeDefs = readFileSync('src/graphql/schema.graphql').toString('utf-8');
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
 try {
-  console.log('Mongo uri', process.env.MONGO_URI);
   connect(`${process.env.MONGO_URI}`);
 } catch (e) {
   console.error('Error Mongoose', e);
