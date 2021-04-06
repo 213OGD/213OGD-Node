@@ -1,0 +1,23 @@
+type File {
+    _id: String
+    googleId: String
+    name: String
+    webViewLink: String
+    iconLink: String
+    tags: [String]
+}
+
+input tagInput {
+    idFile: String
+    tag: String
+}
+
+type Query {
+    file: File
+    files: [File]
+}
+
+type Mutation {
+    addTag(tagInput: tagInput): File
+    deleteTag(tagInput: tagInput): File
+}

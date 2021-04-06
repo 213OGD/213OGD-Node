@@ -1,24 +1,25 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, consistent-return, no-console */
 import mongoose from 'mongoose';
 
-const connect = (uri: string): void => {
-  mongoose
-    .connect(uri, {
+const connect = async (uri: string): Promise<any> => {
+  try {
+    const db = await mongoose.connect(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
       autoIndex: true,
-    })
-    // eslint-disable-next-line no-console
-    .then(() => console.log('GDDrive: Connected to database'))
-    // eslint-disable-next-line no-console
-    .catch((err: Error) => console.log(err.message, ' ', `${uri}`));
+    });
+
+    console.log('connected to database');
+    return db;
+  } catch (error) {
+    console.log(error.message, ' ', `${uri}`);
+  }
 };
 export const disconnect = (): void => {
   mongoose
     .disconnect()
-    // eslint-disable-next-line no-console
     .then(() => console.log('Database connection closed.'))
-    // eslint-disable-next-line no-console
     .catch((err: Error) => console.log(err.message));
 };
 

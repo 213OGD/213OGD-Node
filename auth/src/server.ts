@@ -7,11 +7,11 @@ import connect from './database/database';
 import { resolvers } from './graphql/resolvers';
 
 
-async function start(){
+ const start = async () => {
 
   const typeDefs = readFileSync('src/graphql/schema.graphql').toString('utf-8');
 
-  await connect(`${process.env.MONGO_URI}`);
+  await connect(`${process.env.MONGO_URI}`,);
   
   const server = new ApolloServer({ typeDefs, resolvers, context: ({ req }) => {
   

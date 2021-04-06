@@ -1,7 +1,14 @@
-import { ApolloServer, gql } from 'apollo-server';
+/* eslint-disable @typescript-eslint/no-explicit-any, consistent-return, no-console */
+import { ApolloServer } from 'apollo-server';
+import { readFileSync } from 'fs';
 import 'dotenv/config';
 import connect from './database/database';
-import FileModels from './models/FileModels';
+// import FileModels from './models/FileModels';
+import resolvers from './resolvers/resolver';
+
+if (!process.env.MONGO_URI) {
+  throw new Error('MONGO_URI must be defined');
+}
 
 export type FileType = {
   googleID: string;
@@ -11,41 +18,17 @@ export type FileType = {
   tags: [string];
 };
 
-const typeDefs = gql`
-  type File {
-    _id: String
-    googleId: String
-    name: String
-    webViewLink: String
-    iconLink: String
-    tags: [String]
-  }
+const start = async () => {
+  const typeDefs = readFileSync('src/graphql/schema.graphql').toString('utf-8');
 
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
-  type Query {
-    files: [File]
-  }
-`;
+  await connect(`${process.env.MONGO_URI}`);
 
-// Resolvers define the technique for fetching the types defined in the
-// schema. This resolver retrieves books from the "books" array above.
-const resolvers = {
-  Query: {
-    files: async () => {
-      const files = await FileModels.find();
-      return files;
-    },
-  },
+  const server = new ApolloServer({ typeDefs, resolvers });
+
+  // The `listen` method launches a web server.
+  server.listen().then(({ url }) => {
+    console.log(`🚀 Server ready at ${url}`);
+  });
 };
 
-// The ApolloServer constructor requires two parameters: your schema
-// definition and your set of resolvers.
-const server = new ApolloServer({ typeDefs, resolvers });
-
-connect(`${process.env.MONGO_URI}`);
-// The `listen` method launches a web server.
-server.listen().then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`);
-});
+start();

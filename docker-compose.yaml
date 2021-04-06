@@ -4,15 +4,14 @@ services:
     image: 213ogd/gdrive
     build:
       context: gdrive
-      # dockerfile: ./gdrive/Dockerfile
+      dockerfile: Dockerfile
     volumes:
       - ./gdrive/src:/app/src
     ports: 
       - "4000:4000"
     container_name: 213ogd-gdrive
-    # environment:
-    #   - PORT=${PORT}
-    #   - MONGO_URI=${MONGO_URI}
+    env_file:
+      ./gdrive/.env
     networks: 
       - microservices
 
@@ -20,11 +19,11 @@ services:
     image: 213ogd/auth
     build:
       context: auth
-      # dockerfile: ./auth/Dockerfile
+      dockerfile: Dockerfile
     ports: 
       - "5000:4000"
-    # environment:
-    #   - PORT=${PORT}
+    env_file:
+        ./auth/.env
     volumes: 
       - ./auth/src:/app/src
     networks: 
