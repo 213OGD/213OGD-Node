@@ -1,0 +1,23 @@
+{
+  "name": "213OGD-Node",
+  "version": "1.0.0",
+  "description": "# Project Version",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/213OGD/213OGD-Node.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/213OGD/213OGD-Node/issues"
+  },
+  "homepage": "https://github.com/213OGD/213OGD-Node#readme",
+  "dependencies": {
+    "husky": "^6.0.0"
+  }
+}
