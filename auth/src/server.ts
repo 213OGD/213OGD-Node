@@ -1,70 +1,27 @@
-import { ApolloServer, gql } from 'apollo-server';
+import { ApolloServer } from 'apollo-server';
 import 'dotenv/config';
+import { readFileSync } from 'fs';
+import { getPayload } from './util';
+
 import connect from './database/database';
-import UserModel from './models/UserModel';
+import { resolvers } from './graphql/resolvers';
 
-export type UserType = {
-    _id: string;
-    username: string;
-    mail: string;
-    password: string;
-}
+const typeDefs = readFileSync('src/graphql/schema.graphql').toString('utf-8');
 
-const typeDefs = gql`
-    type User {
-        _id: ID
-        username: String
-        mail: String
-    }
+const server = new ApolloServer({ typeDefs, resolvers, context: ({ req }) => {
 
-    type Query {
-        users: [User]
-    }
+  connect(`${process.env.MONGO_URI}`);
 
-    type Mutation {
-      addUser(user: UserInput) : User
-    }
+  // get the user token from the headers
+  const token = req.headers.authorization || '';
+  // try to retrieve a user with the token
+  const { payload: user, loggedIn } = getPayload(token);
 
-    input UserInput{
-      username: String
-      mail: String
-      password: String
-    }
-`;
+  // add the user to the context
+  return { user, loggedIn };
 
-// type Mutation {
-//   addUser(username: String!, mail: String!, password: String!) : User!
-// }
-// type Mutation {
-//   addUser(User: UserInput) : User
-// }
+} });
 
-// input UserInput {
-// username: String
-// mail: String
-// password: String
-// }
-
-const resolvers = {
-  Query: {
-    users: async () => {
-      const users = await UserModel.find();
-      return users;
-    },
-  },
-  Mutation: {
-    addUser: async (_:unknown, user: any) => {
-      const addUser = await UserModel.create(user.user);
-      console.log('log', addUser);
-      // return await addUser.save();
-      return addUser;
-    },
-  },
-};
-
-const server = new ApolloServer({ typeDefs, resolvers });
-
-connect(`${process.env.MONGO_URI}`);
 server.listen().then(({ url }) => {
   console.log(`🚀 Server ready at ${url}`);
 });

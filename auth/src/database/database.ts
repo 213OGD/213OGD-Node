@@ -13,6 +13,7 @@ const connect = (uri: string): void => {
     // eslint-disable-next-line no-console
     .catch((err: Error) => console.log(err.message, ' ', `${uri}`));
 };
+
 export const disconnect = (): void => {
   mongoose
     .disconnect()
