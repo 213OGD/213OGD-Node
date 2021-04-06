@@ -3,6 +3,10 @@ type User {
     _id: ID
     username: String
     mail: String
+}
+
+type UserAndToken {
+    user: User
     token: String
 }
 
@@ -11,8 +15,8 @@ type Query {
 }
 
 type Mutation {
-    addUser(username: String!, mail: String!, password: String!) : User
-    login(mail: String!, password: String!): User
+    addUser(username: String!, mail: String!, password: String!) : UserAndToken
+    login(mail: String!, password: String!): UserAndToken
 }
 
 input UserInput{

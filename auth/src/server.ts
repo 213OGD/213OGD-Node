@@ -6,22 +6,28 @@ import { getPayload } from './util';
 import connect from './database/database';
 import { resolvers } from './graphql/resolvers';
 
-const typeDefs = readFileSync('src/graphql/schema.graphql').toString('utf-8');
 
-const server = new ApolloServer({ typeDefs, resolvers, context: ({ req }) => {
+async function start(){
 
-  connect(`${process.env.MONGO_URI}`);
+  const typeDefs = readFileSync('src/graphql/schema.graphql').toString('utf-8');
 
-  // get the user token from the headers
-  const token = req.headers.authorization || '';
-  // try to retrieve a user with the token
-  const { payload: user, loggedIn } = getPayload(token);
+  await connect(`${process.env.MONGO_URI}`);
+  
+  const server = new ApolloServer({ typeDefs, resolvers, context: ({ req }) => {
+  
+    // get the user token from the headers
+    const token = req.headers.authorization || '';
+    // try to retrieve a user with the token
+    const { payload: user, loggedIn } = getPayload(token);
+  
+    // add the user to the context
+    return { user, loggedIn };
+  
+  } });
+  
+  server.listen().then(({ url }) => {
+    console.log(`🚀 Server ready at ${url}`);
+  });
+}
 
-  // add the user to the context
-  return { user, loggedIn };
-
-} });
-
-server.listen().then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`);
-});
+start();

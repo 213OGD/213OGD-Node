@@ -21,19 +21,21 @@ const resolvers = {
 
         try{
             const addUser = await UserModel.create(newUser);
-            console.log('log', addUser);
+            console.log('addUser', addUser);
 
             // Creating a Token from User Payload obtained.
             const token = getToken(addUser);
 
+            
             // return await addUser.save();
-            return { ...addUser, token };
+            // console.log('return', {addUser, token});
+            return ({user: addUser, token});
         } catch (e){
             throw e;
         }
       },
 
-      login: async (args: { mail: string; password: string; }) => {
+      login: async (_:unknown, args: { mail: string; password: string; }) => {
                 // Finding a user from user collection.
             const user = await UserModel.findOne({ mail: args.mail });
             // Checking For Encrypted Password Match with util func.
@@ -43,7 +45,7 @@ const resolvers = {
                 if (isMatch) {
                 // Creating a Token from User Payload obtained.
                 const token = getToken(user);
-                return { ...user, token };
+                return { user, token };
                 } else {
                 // Throwing Error on Match Status Failed.
                 throw new AuthenticationError("Wrong Password!");
