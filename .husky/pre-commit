@@ -2,4 +2,5 @@
 . "$(dirname $0)/_/husky.sh"
 
 echo "Husky"
-npm run prettier && npm run lint
+cd ./auth npm run prettier && npm run lint
+cd ../gdrive npm run prettier && npm run lint
