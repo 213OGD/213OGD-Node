@@ -3,3 +3,5 @@ node_modules
 build
 .prettierrc
 .eslintrc.json
+*.graphql
+*.json

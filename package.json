@@ -1,10 +1,11 @@
 {
-  "name": "213OGD-Node",
+  "name": "213_node",
   "version": "1.0.0",
   "description": "# Project Version",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -17,7 +18,7 @@
     "url": "https://github.com/213OGD/213OGD-Node/issues"
   },
   "homepage": "https://github.com/213OGD/213OGD-Node#readme",
-  "dependencies": {
+  "devDependencies": {
     "husky": "^6.0.0"
   }
 }
