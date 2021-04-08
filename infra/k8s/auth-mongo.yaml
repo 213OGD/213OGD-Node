@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ogd213-auth-mongo
+spec:
+  selector:
+    matchLabels:
+      app: ogd213-auth-mongo
+  serviceName: ogd213-auth-mongo-srv
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ogd213-auth-mongo
+    spec:
+      containers:
+        - name: ogd213-auth-mongo
+          image: mongo
+          volumeMounts:
+            - name: ogd213-mongo-auth-disk
+              mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: ogd213-mongo-auth-disk
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ogd213-auth-mongo-srv
+spec:
+  selector:
+    app: ogd213-auth-mongo
+  ports:
+  - port: 27017
+    targetPort: 27017

@@ -1,0 +1,6 @@
+.husky
+node_modules
+.vscode
+README.md
+.git
+.gitignore

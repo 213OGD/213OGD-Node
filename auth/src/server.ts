@@ -1,4 +1,7 @@
-import { ApolloServer } from 'apollo-server';
+/* eslint-disable no-console */
+import { ApolloServer, gql } from 'apollo-server';
+import { buildFederatedSchema } from '@apollo/federation';
+import { GraphQLResolverMap } from 'apollo-graphql';
 import 'dotenv/config';
 import { readFileSync } from 'fs';
 import { getPayload } from './util';
@@ -7,13 +10,15 @@ import connect from './database/database';
 import { resolvers } from './graphql/resolvers';
 
 const start = async () => {
-  const typeDefs = readFileSync('src/graphql/schema.graphql').toString('utf-8');
+  const typeDefs = gql(
+    readFileSync('src/graphql/schema.graphql').toString('utf-8')
+  );
 
   await connect(`${process.env.MONGO_URI}`);
 
   const server = new ApolloServer({
-    typeDefs,
-    resolvers,
+    // @ts-ignore
+    schema: buildFederatedSchema([{ typeDefs, resolvers }]),
     context: ({ req }) => {
       // get the user token from the headers
       const token = req.headers.authorization || '';

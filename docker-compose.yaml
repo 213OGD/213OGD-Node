@@ -1,6 +1,6 @@
 version: '3.3'
 services:
-  gdrive:
+  gdrive-service:
     image: 213ogd/gdrive
     build:
       context: gdrive
@@ -8,28 +8,40 @@ services:
     volumes:
       - ./gdrive/src:/app/src
     ports: 
-      - "4000:4000"
-    container_name: 213ogd-gdrive
+      - "4001:4000"
     env_file:
       ./gdrive/.env
     networks: 
       - microservices
 
-  auth:
+  auth-service:
     image: 213ogd/auth
     build:
       context: auth
       dockerfile: Dockerfile
     ports: 
-      - "5000:4000"
-    env_file:
-        ./auth/.env
+      - "4002:4000"
     volumes: 
       - ./auth/src:/app/src
     networks: 
       - microservices
     depends_on: 
       - authmongo
+
+  gateway:
+    image: 213ogd/gateway
+    build:
+      context: gateway
+      dockerfile: Dockerfile
+    ports: 
+      - "4000:4000"
+    volumes: 
+      - ./gateway/src:/app/src
+    networks: 
+      - microservices
+    depends_on: 
+      - gdrive-service
+      - auth-service
 
   authmongo:
     image: mongo

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ogd213-gdrive-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ogd213-gdrive
+  template:
+    metadata:
+      labels:
+        app: ogd213-gdrive
+    spec:
+      containers:
+        - name: gdrive
+          image: 213ogd/gdrive
+          # env:
+          #   - name: MONGO_URI
+          #     value: mongodb+srv://ogd213:fK0uRT1SJ5bk@cluster213.l0oyn.mongodb.net/files?retryWrites=true&w=majority
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ogd213-gdrive-srv
+spec:
+  selector:
+    app: ogd213-gdrive
+  ports:
+    - name: ogd213-gdrive
+      protocol: TCP
+      port: 4000
+      targetPort: 4000

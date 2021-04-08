@@ -15,7 +15,6 @@ export interface FileDoc extends mongoose.Document {
 }
 
 interface FileModel extends mongoose.Model<FileDoc> {
-  build(attrs: FileAttrs): FileDoc;
 }
 
 const FilesSchema = new mongoose.Schema(
@@ -26,21 +25,17 @@ const FilesSchema = new mongoose.Schema(
     iconLink: { type: String, required: true },
     tags: { type: Array },
   },
-  {
-    toJSON: {
-      transform(doc, ret) {
-        // eslint-disable-next-line no-underscore-dangle, no-param-reassign
-        ret.id = ret._id;
-        // eslint-disable-next-line no-underscore-dangle, no-param-reassign
-        delete ret._id;
-      },
-    },
-  }
+  // {
+  //   toJSON: {
+  //     transform(doc, ret) {
+  //       // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+  //       ret.id = ret._id;
+  //       // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+  //       delete ret._id;
+  //     },
+  //   },
+  // }
 );
-
-FilesSchema.statics.build = (attrs: FileAttrs) => {
-  return new File(attrs);
-};
 
 const File = mongoose.model<FileDoc, FileModel>('File', FilesSchema);
 
