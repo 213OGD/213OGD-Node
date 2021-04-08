@@ -2,6 +2,7 @@ version: '3.3'
 services:
   gdrive-service:
     image: 213ogd/gdrive
+    restart: always
     build:
       context: gdrive
       dockerfile: Dockerfile
@@ -16,6 +17,7 @@ services:
 
   auth-service:
     image: 213ogd/auth
+    restart: always
     build:
       context: auth
       dockerfile: Dockerfile
@@ -23,6 +25,8 @@ services:
       - "4002:4000"
     volumes: 
       - ./auth/src:/app/src
+    env_file:
+      ./auth/.env
     networks: 
       - microservices
     depends_on: 
@@ -30,6 +34,7 @@ services:
 
   gateway:
     image: 213ogd/gateway
+    restart: always
     build:
       context: gateway
       dockerfile: Dockerfile
@@ -37,6 +42,8 @@ services:
       - "4000:4000"
     volumes: 
       - ./gateway/src:/app/src
+    env_file:
+        ./gateway/.env
     networks: 
       - microservices
     depends_on: 
@@ -45,6 +52,7 @@ services:
 
   authmongo:
     image: mongo
+    restart: always
     ports:
       - "27017:27017"
     volumes:
