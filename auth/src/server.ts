@@ -1,7 +1,5 @@
-/* eslint-disable no-console */
 import { ApolloServer, gql } from 'apollo-server';
 import { buildFederatedSchema } from '@apollo/federation';
-import { GraphQLResolverMap } from 'apollo-graphql';
 import 'dotenv/config';
 import { readFileSync } from 'fs';
 import { getPayload } from './util';
@@ -17,6 +15,7 @@ const start = async () => {
   await connect(`${process.env.MONGO_URI}`);
 
   const server = new ApolloServer({
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     schema: buildFederatedSchema([{ typeDefs, resolvers }]),
     context: ({ req }) => {

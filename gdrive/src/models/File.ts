@@ -1,10 +1,7 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable import/prefer-default-export */
 import mongoose from 'mongoose';
-
-interface FileAttrs {
-  tags: [string];
-}
 
 export interface FileDoc extends mongoose.Document {
   googleId: string;
@@ -14,8 +11,7 @@ export interface FileDoc extends mongoose.Document {
   tags: [string];
 }
 
-interface FileModel extends mongoose.Model<FileDoc> {
-}
+interface FileModel extends mongoose.Model<FileDoc> {}
 
 const FilesSchema = new mongoose.Schema(
   {
@@ -25,16 +21,16 @@ const FilesSchema = new mongoose.Schema(
     iconLink: { type: String, required: true },
     tags: { type: Array },
   },
-  // {
-  //   toJSON: {
-  //     transform(doc, ret) {
-  //       // eslint-disable-next-line no-underscore-dangle, no-param-reassign
-  //       ret.id = ret._id;
-  //       // eslint-disable-next-line no-underscore-dangle, no-param-reassign
-  //       delete ret._id;
-  //     },
-  //   },
-  // }
+  {
+    toJSON: {
+      transform(doc, ret) {
+        // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+        ret.id = ret._id;
+        // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+        delete ret._id;
+      },
+    },
+  }
 );
 
 const File = mongoose.model<FileDoc, FileModel>('File', FilesSchema);
