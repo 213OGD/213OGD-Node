@@ -1,13 +1,19 @@
 /* eslint-disable import/prefer-default-export, @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types, no-console, no-useless-catch, consistent-return */
 import { AuthenticationError } from 'apollo-server';
 import { comparePassword, encryptPassword, getToken } from '../util';
-import UserModel from '../models/UserModel';
+import { User } from '../models/UserModel';
 
 const resolvers = {
   Query: {
     users: async () => {
-      const users = await UserModel.find();
+      const users = await User.find();
       return users;
+    },
+  },
+  User: {
+    __resolveReference: async (ref: any) => {
+      const currentUser = await User.findOne({ _id: ref.id });
+      return currentUser;
     },
   },
   Mutation: {
@@ -22,13 +28,13 @@ const resolvers = {
       };
 
       // Get user document from 'user' collection.
-      const user = await UserModel.findOne({ mail: args.mail }); // Check If User Exists Already Throw Error
+      const user = await User.findOne({ mail: args.mail }); // Check If User Exists Already Throw Error
       if (user) {
         throw new AuthenticationError('User Already Exists!');
       }
 
       try {
-        const addUser = await UserModel.create(newUser);
+        const addUser = await User.create(newUser);
         console.log('addUser', addUser);
 
         // Creating a Token from User Payload obtained.
@@ -44,7 +50,7 @@ const resolvers = {
 
     login: async (_: unknown, args: { mail: string; password: string }) => {
       // Finding a user from user collection.
-      const user = await UserModel.findOne({ mail: args.mail });
+      const user = await User.findOne({ mail: args.mail });
       // Checking For Encrypted Password Match with util func.
       if (user) {
         const isMatch = await comparePassword(args.password, user.password);

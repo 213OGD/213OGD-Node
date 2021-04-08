@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ogd213-gateway-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ogd213-gateway
+  template:
+    metadata:
+      labels:
+        app: ogd213-gateway
+    spec:
+      containers:
+        - name: gateway
+          image: 213ogd/gateway
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ogd213-gateway-srv
+spec:
+  selector:
+    app: ogd213-gateway
+  ports:
+    - name: ogd213-gateway
+      protocol: TCP
+      port: 4000
+      targetPort: 4000

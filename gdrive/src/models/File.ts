@@ -1,10 +1,7 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable import/prefer-default-export */
 import mongoose from 'mongoose';
-
-interface FileAttrs {
-  tags: [string];
-}
 
 export interface FileDoc extends mongoose.Document {
   googleId: string;
@@ -14,9 +11,7 @@ export interface FileDoc extends mongoose.Document {
   tags: [string];
 }
 
-interface FileModel extends mongoose.Model<FileDoc> {
-  build(attrs: FileAttrs): FileDoc;
-}
+interface FileModel extends mongoose.Model<FileDoc> {}
 
 const FilesSchema = new mongoose.Schema(
   {
@@ -37,10 +32,6 @@ const FilesSchema = new mongoose.Schema(
     },
   }
 );
-
-FilesSchema.statics.build = (attrs: FileAttrs) => {
-  return new File(attrs);
-};
 
 const File = mongoose.model<FileDoc, FileModel>('File', FilesSchema);
 

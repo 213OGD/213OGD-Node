@@ -14,7 +14,7 @@
   "parserOptions": {
   "ecmaVersion": 2020,
   "sourceType": "module",
-  "project": "./tsconfig.json"
+  "project": "./auth/tsconfig.json"
   },
   "plugins": [
   "@typescript-eslint",

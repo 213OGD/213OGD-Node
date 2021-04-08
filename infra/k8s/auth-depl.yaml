@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ogd213-auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ogd213-auth
+  template:
+    metadata:
+      labels:
+        app: ogd213-auth
+    spec:
+      containers:
+        - name: auth
+          image: 213ogd/auth
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://ogd213-auth-mongo-srv:27017/auth'
+            - name: SECRET_TOKEN
+              value: 'supersecrettoken'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ogd213-auth-srv
+spec:
+  selector:
+    app: ogd213-auth
+  ports:
+    - name: ogd213-auth
+      protocol: TCP
+      port: 4000
+      targetPort: 4000
