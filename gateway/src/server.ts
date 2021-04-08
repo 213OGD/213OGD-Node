@@ -1,11 +1,17 @@
 import { ApolloServer } from 'apollo-server';
 import { ApolloGateway } from '@apollo/gateway';
+import 'dotenv/config';
+
+
+if (!process.env.GDRIVE_URL && !process.env.AUTH_URL) {
+  throw new Error('URI must be defined');
+}
 
 
   const gateway = new ApolloGateway({
     serviceList: [
-      { name: 'auth', url: 'http://ogd213-auth-srv:4000' },
-      { name: 'gdrive', url: 'http://ogd213-gdrive-srv:4000' },
+      { name: 'auth', url: process.env.AUTH_URL },
+      { name: 'gdrive', url: process.env.GDRIVE_URL },
     ],
   });
   

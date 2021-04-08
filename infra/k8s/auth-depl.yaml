@@ -17,9 +17,9 @@ spec:
           image: 213ogd/auth
           env:
             - name: MONGO_URI
-              value: 'mongodb://ogd213-auth-mongo-srv:27017/auth'
+              value: mongodb://ogd213-auth-mongo-srv:27017/auth
             - name: SECRET_TOKEN
-              value: 'supersecrettoken'
+              value: supersecrettoken
 ---
 apiVersion: v1
 kind: Service
