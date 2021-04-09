@@ -74,7 +74,8 @@ const resolvers = {
         const user = await User.findOne({ _id : isAuth.id_payload });
         console.log('user', user);
         // console.log(isAuth.payload);
-        return isAuth && user ? true : false;
+
+        return isAuth.loggedIn && user ? true : false;
         
       }
   },
