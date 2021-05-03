@@ -43,13 +43,9 @@ export const getToken = (payload: string | object | Buffer) => {
 export const getPayload = (token: string) => {
   try {
     // Verify JWT Token
-    const payload = jwt.verify(token, `${process.env.SECRET_TOKEN}`);
+    jwt.verify(token, `${process.env.SECRET_TOKEN}`);
 
-    const pld = JSON.stringify(payload)
-    
-    const id_payload = pld.split('"')[3];
-
-    return { loggedIn: true, id_payload };
+    return { loggedIn: true };
   } catch (err) {
     // Failed Login Status
     // Add Err Message

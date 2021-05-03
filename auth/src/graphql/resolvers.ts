@@ -69,14 +69,9 @@ const resolvers = {
       const isAuth = getPayload(args.token);
 
       if(isAuth){
-          console.log('isAuth', isAuth);
-        }
-        const user = await User.findOne({ _id : isAuth.id_payload });
-        console.log('user', user);
-        // console.log(isAuth.payload);
-
-        return isAuth.loggedIn && user ? true : false;
-        
+        return isAuth.loggedIn ? true : false;
+      }
+      return false;
       }
   },
 };
