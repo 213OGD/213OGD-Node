@@ -1,0 +1,60 @@
+version: '3.3'
+services:
+  gdrive-service:
+    image: 213ogd/gdrive
+    restart: always
+    env_file:
+      ./gdrive/.env
+    networks: 
+      - microservices
+    command: sh -c "npm run start:prod"
+
+  auth-service:
+    image: 213ogd/auth
+    restart: always
+    env_file:
+      ./auth/.env
+    networks: 
+      - microservices
+    depends_on: 
+      - authmongo
+    command: sh -c "npm run start:prod"
+
+  gateway:
+    image: 213ogd/gateway
+    restart: always
+    env_file:
+        ./gateway/.env
+    networks: 
+      - microservices
+    depends_on: 
+      - gdrive-service
+      - auth-service
+    command: sh -c "npm run start:prod"
+    expose: 
+      - 4000
+
+  authmongo:
+    image: mongo
+    restart: always
+    networks: 
+      - microservices
+
+  nginx:
+    image: nginx:1.19.10
+    restart: always
+    ports:
+      - ${GATEWAY_PORT}:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/log:/var/log/nginx/
+
+
+    networks: 
+      - microservices
+
+volumes: 
+  authmongo:
+networks:
+  microservices:
+

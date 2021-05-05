@@ -1,0 +1,55 @@
+version: '3.3'
+services:
+  gdrive-service:
+    image: 213ogd/gdrive
+    restart: always
+    volumes:
+      - ./gdrive/src:/app/src
+    ports: 
+      - "4001:4000"
+    env_file:
+      ./gdrive/.env
+    networks: 
+      - microservices
+
+  auth-service:
+    image: 213ogd/auth
+    restart: always
+    ports: 
+      - "4002:4000"
+    volumes: 
+      - ./auth/src:/app/src
+    env_file:
+      ./auth/.env
+    networks: 
+      - microservices
+    depends_on: 
+      - authmongo
+
+  gateway:
+    image: 213ogd/gateway
+    restart: always
+    ports: 
+      - "4000:4000"
+    volumes: 
+      - ./gateway/src:/app/src
+    env_file:
+        ./gateway/.env
+    networks: 
+      - microservices
+    depends_on: 
+      - gdrive-service
+      - auth-service
+
+  authmongo:
+    image: mongo
+    restart: always
+    volumes:
+      - authmongo:/data/db:rw
+    networks: 
+      - microservices
+
+volumes: 
+  authmongo:
+networks:
+  microservices:
