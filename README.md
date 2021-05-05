@@ -14,12 +14,52 @@ Node v15.4.0
 
 # Configure Files
 
-1. add script to package.json (see issue below) `"start": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec \"ts-node\" src/server.ts"`
+1. add script to package.json (see issue below) 
+`"start": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec \"ts-node\" src/server.ts"`
 
+2. create `.env` in `./gdrive` & `./gateway` & `./auth` directories
+
+3. create `.credentials.json` in `./gdrive` directory
 # Configure Database
 
 1. `npm i mongoose @types/mongoose`
 
 # Known issues
 
-1. For Windows users, we cannot use simple quotes to execute ts-node command. Using double quotes with backslash instead.
+1. For Windows users, we cannot use simple quotes to execute ts-node command. Using double quotes with backslash instead. 
+WORKAROUND : PLZ USE DOCKER !!!
+
+## Démarrer en dev
+
+### 1. Rendre le fichier start_dev.sh executable
+
+```sh 
+chmod +x start_dev.sh
+```
+OU
+```sh 
+chmod 755 start_dev.sh
+``` 
+
+### 2. Lancer le projet docker-compose avec la cmd
+
+```sh
+sh ./start_dev.sh
+```
+## Démarrer en prod
+
+### 1. Rendre le fichier start_prod.sh executable
+
+```sh 
+chmod +x start_prod.sh
+```
+OU
+```sh 
+chmod 755 start_prod.sh
+``` 
+
+### 2. Préciser le port & lancer le projet docker-compose avec la cmd
+
+```sh
+PORT=*PORT* sh ./start_prod.sh
+```
