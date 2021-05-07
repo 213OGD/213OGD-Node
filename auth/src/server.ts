@@ -18,14 +18,16 @@ const start = async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     schema: buildFederatedSchema([{ typeDefs, resolvers }]),
-    context: ({ req }) => {
+    context: ({ req, res }) => {
+      // console.log('req ===>', req);
+      // console.log('res ===>', res);
       // get the user token from the headers
-      const token = req.headers.authorization || '';
-      // try to retrieve a user with the token
-      const { payload: user, loggedIn } = getPayload(token);
+      // const token = req.headers.authorization || '';
+      // // try to retrieve a user with the token
+      // const { payload: user, loggedIn } = getPayload(token);
 
-      // add the user to the context
-      return { user, loggedIn };
+      // // add the user to the context
+      // return { user, loggedIn };
     },
   });
 

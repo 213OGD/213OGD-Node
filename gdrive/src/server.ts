@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, consistent-return, no-console */
-import { ApolloServer, gql } from 'apollo-server';
+import { ApolloServer, AuthenticationError, gql } from 'apollo-server';
 import { buildFederatedSchema } from '@apollo/federation';
 import { readFileSync } from 'fs';
 import 'dotenv/config';
@@ -30,6 +30,14 @@ const start = async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     schema: buildFederatedSchema([{ typeDefs, resolvers }]),
+    context: ({ req, res }) => {
+      // console.log('req', req);
+      // console.log('res', res);
+      // console.log('auth', req.headers);
+      // const user = req.headers.authorization || null;
+      // if (!user) throw new AuthenticationError('you must be logged in');
+      // return { user };
+    },
   });
 
   // The `listen` method launches a web server.
