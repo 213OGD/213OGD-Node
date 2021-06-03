@@ -20,30 +20,31 @@ export type FileType = {
 };
 
 const start = async () => {
-  const typeDefs = gql(
-    readFileSync('src/graphql/schema.graphql').toString('utf-8')
-  );
-
-  await connect(`${process.env.MONGO_URI}`);
-
-  const server = new ApolloServer({
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    schema: buildFederatedSchema([{ typeDefs, resolvers }]),
-    context: ({ req, res }) => {
-      // console.log('req', req);
-      // console.log('res', res);
-      // console.log('auth', req.headers);
-      // const user = req.headers.authorization || null;
-      // if (!user) throw new AuthenticationError('you must be logged in');
-      // return { user };
-    },
-  });
-
-  // The `listen` method launches a web server.
-  server.listen().then(({ url }) => {
-    console.log(`🚀 Server ready at ${url}`);
-  });
+  try {
+    const typeDefs = gql(
+      readFileSync('src/graphql/schema.graphql').toString('utf-8')
+    );
+    await connect(`${process.env.MONGO_URI}`);
+    const server = new ApolloServer({
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      schema: buildFederatedSchema([{ typeDefs, resolvers }]),
+      context: ({ req }) => {
+        console.log('req', req);
+        console.log('auth', req.headers);
+        const user = req.headers.user ? req.headers.user : null;
+        if (!user) throw new AuthenticationError('you must be logged in');
+        return { user };
+      },
+    });
+    // The `listen` method launches a web server.
+    server.listen().then(({ url }) => {
+      console.log(`🚀 Server ready at ${url}`);
+    });
+  } catch (error) {
+    console.error(`Unable to start gateway: ${error.message}`);
+    process.exit(1);
+  }
 };
 
 start();

@@ -16,14 +16,12 @@ const gateway = new ApolloGateway({
     return new RemoteGraphQLDataSource({
       url,
       willSendRequest({ request, context }) {
-        console.log('context =====>', context)
-        console.log('request =====>', request)
         // @ts-ignore
-        // request.http.headers.set(
-        //   "user",
-        //   // @ts-ignore
-        //   context ? JSON.stringify(context.user) : null
-        // );
+        request.http.headers.set(
+          "user",
+          // @ts-ignore
+          context ? JSON.stringify(context.user) : null
+        );
       }
     });
   }
@@ -38,10 +36,9 @@ const gateway = new ApolloGateway({
         schema,
         executor,
         context: ({ req, res }) => {
-          // console.log('req', req)
-          // console.log('res', res)
-          // const user = req.headers.authorization || null;
-          // return { user };
+          console.log('req', req)
+          const user = req.headers.authorization || null;
+          return { user };
         }
        });
     server.listen().then(({ url }) => {
