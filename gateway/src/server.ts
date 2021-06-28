@@ -36,7 +36,7 @@ const gateway = new ApolloGateway({
         schema,
         executor,
         context: ({ req, res }) => {
-          console.log('req', req)
+          // console.log('req', req)
           const user = req.headers.authorization || null;
           return { user };
         }

@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, consistent-return, no-console */
+/* eslint-disable @typescript-eslint/ban-types, consistent-return, @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-shadow, @typescript-eslint/ban-ts-comment */
 import { ApolloServer, AuthenticationError, gql } from 'apollo-server';
 import { buildFederatedSchema } from '@apollo/federation';
 import { readFileSync } from 'fs';
 import 'dotenv/config';
+import jwt from 'jsonwebtoken';
 import connect from './database/database';
 // import FileModels from './models/FileModels';
 import resolvers from './resolvers/resolver';
@@ -19,6 +20,19 @@ export type FileType = {
   tags: [string];
 };
 
+export const getPayload = (token: string): Record<string, boolean> => {
+  try {
+    // Verify JWT Token
+    jwt.verify(token, `${process.env.SECRET_TOKEN}`);
+
+    return { loggedIn: true };
+  } catch (err) {
+    // Failed Login Status
+    // Add Err Message
+    return { loggedIn: false };
+  }
+};
+
 const start = async () => {
   try {
     const typeDefs = gql(
@@ -26,15 +40,20 @@ const start = async () => {
     );
     await connect(`${process.env.MONGO_URI}`);
     const server = new ApolloServer({
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       schema: buildFederatedSchema([{ typeDefs, resolvers }]),
       context: ({ req }) => {
-        console.log('req', req);
-        console.log('auth', req.headers);
-        const user = req.headers.user ? req.headers.user : null;
-        if (!user) throw new AuthenticationError('you must be logged in');
-        return { user };
+        // const user = req.headers.user ? req.headers.user : null;
+        // console.log('user', user);
+        // if (typeof user === 'string') {
+        //   const { loggedIn } = getPayload(user);
+        //   console.log('loggedIn', loggedIn);
+        //   if (loggedIn === false) {
+        //     console.log("on passe par l'ereur");
+        //     // throw new AuthenticationError('you must be logged in');
+        //   }
+        // }
+        // return { user };
       },
     });
     // The `listen` method launches a web server.

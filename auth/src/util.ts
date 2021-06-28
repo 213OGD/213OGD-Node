@@ -40,11 +40,12 @@ export const getToken = (payload: string | object | Buffer) => {
   return token;
 };
 
-export const getPayload = (token: string) => {
+export const getPayload = (token: string): Record<string, boolean> => {
   try {
     // Verify JWT Token
-    const payload = jwt.verify(token, `${process.env.SECRET_TOKEN}`);
-    return { loggedIn: true, payload };
+    jwt.verify(token, `${process.env.SECRET_TOKEN}`);
+
+    return { loggedIn: true };
   } catch (err) {
     // Failed Login Status
     // Add Err Message

@@ -1,6 +1,11 @@
 /* eslint-disable import/prefer-default-export, @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types, no-console, no-useless-catch, consistent-return */
 import { AuthenticationError } from 'apollo-server';
-import { comparePassword, encryptPassword, getToken } from '../util';
+import {
+  comparePassword,
+  encryptPassword,
+  getPayload,
+  getToken,
+} from '../util';
 import { User } from '../models/UserModel';
 
 const resolvers = {
@@ -38,7 +43,7 @@ const resolvers = {
         console.log('addUser', addUser);
 
         // Creating a Token from User Payload obtained.
-        const token = getToken(addUser);
+        const token = getToken(addUser._id);
 
         // return await addUser.save();
         // console.log('return', {addUser, token});
@@ -56,12 +61,21 @@ const resolvers = {
         const isMatch = await comparePassword(args.password, user.password);
         if (isMatch) {
           // Creating a Token from User Payload obtained.
-          const token = getToken(user);
+          const token = getToken(user._id);
           return { user, token };
         }
         // Throwing Error on Match Status Failed.
         throw new AuthenticationError('Wrong Password!');
       }
+    },
+
+    getAuthPayload: async (_: unknown, args: { token: string }) => {
+      const isAuth = getPayload(args.token);
+
+      if (isAuth) {
+        return isAuth.loggedIn ? true : false;
+      }
+      return false;
     },
   },
 };

@@ -16,6 +16,7 @@ type Query {
 type Mutation {
     addUser(username: String!, mail: String!, password: String!) : UserAndToken
     login(mail: String!, password: String!): UserAndToken
+    getAuthPayload(token: String!) : Boolean
 }
 
 input UserInput{
