@@ -7,6 +7,15 @@ type File {
     tags: [String]
 }
 
+type Tag {
+    name: String
+}
+
+type FileAndTags {
+    file: File 
+    tags: [Tag]
+}
+
 input tagInput {
     idFile: String
     tag: String
@@ -15,9 +24,10 @@ input tagInput {
 type Query {
     file: File
     files: [File]
+    tags: [Tag]
 }
 
 type Mutation {
-    addTag(tagInput: tagInput): File
-    deleteTag(tagInput: tagInput): File
+    addTag(tagInput: tagInput): FileAndTags
+    deleteTag(tagInput: tagInput): FileAndTags
 }
