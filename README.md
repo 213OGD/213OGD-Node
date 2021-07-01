@@ -63,3 +63,5 @@ chmod 755 start_prod.sh
 ```sh
 PORT=*PORT* sh ./start_prod.sh
 ```
+
+### Bien penser à ajouter le mail de service account au personne ayant acces au ficher
