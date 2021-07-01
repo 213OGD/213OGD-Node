@@ -63,15 +63,3 @@ const TagMutation = {
   },
 };
 export default TagMutation;
-
-// const TagMutation = {
-//   async addTag(
-//     _: unknown,
-//     args: { tagInput: TagInput }
-//   ): Promise<FileDoc | null> {
-//     const { idFile, tag } = args.tagInput;
-//     const file = await File.findOneAndUpdate(
-//       { _id: idFile },
-//       { $addToSet: { tags: tag } },
-//       { new: true }
-//     );
