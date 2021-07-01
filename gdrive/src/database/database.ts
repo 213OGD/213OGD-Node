@@ -8,6 +8,7 @@ const connect = async (uri: string): Promise<any> => {
       useUnifiedTopology: true,
       useCreateIndex: true,
       autoIndex: true,
+      useFindAndModify: false,
     });
 
     console.log('connected to database');
