@@ -12,7 +12,7 @@ const TagMutation = {
   ): Promise<FileDoc | null> {
     const { idFile, tag } = args.tagInput;
     const file = await File.findOneAndUpdate(
-      { id: idFile },
+      { _id: idFile },
       { $addToSet: { tags: tag } },
       { new: true }
     );
@@ -24,7 +24,7 @@ const TagMutation = {
   ): Promise<FileDoc | null> {
     const { idFile, tag } = args.tagInput;
     const deleteTag = await File.findByIdAndUpdate(
-      { id: idFile },
+      { _id: idFile },
       { $pull: { tags: { $in: [tag] } } },
       { multi: true, new: true }
     );
