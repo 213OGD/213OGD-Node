@@ -20,14 +20,8 @@ const start = async () => {
       // @ts-ignore
       schema: buildFederatedSchema([{ typeDefs, resolvers }]),
       context: async ({ req }) => {
-        // get the user token from the headers
-        // const token = req.headers.authorization || '';
-        // console.log('token', token);
-        // // try to retrieve a user with the token
-        // const  { loggedIn, role } = await getPayload(token);
-
-        // // // add the user to the context
-        // return { loggedIn, role };
+        const { user } = req.headers;
+        return { user };
       },
     });
     server.listen().then(({ url }) => {
