@@ -28,36 +28,31 @@ const FileMutation = {
     parent: any,
     args: any,
     context: any
-  ): Promise<FileDoc[] | undefined> {
+  ): Promise<FileDoc[]> {
     if (context && context.user) {
       const user = JSON.parse(context.user);
       if (user.role !== 'teacher') {
         throw Error('unauthorized request');
       }
-      try {
-        const files = await fetchDrive.listFiles();
-        files?.forEach(async (file) => {
-          const { id, name, webViewLink, iconLink } = file;
-  
-          if (id && name && webViewLink && iconLink) {
-            await File.updateMany(
-              { googleId: id },
-              {
-                googleId: id,
-                name,
-                webViewLink,
-                iconLink,
-              },
-              { upsert: true }
-            );
-          }
-        });
-        const Files = await File.find();
-        return Files;
-      } catch (error) {
-        console.error('createOrUpdate error', error);
-        throw error;
-      }
+      const files = await fetchDrive.listFiles();
+      files?.forEach(async (file) => {
+        const { id, name, webViewLink, iconLink } = file;
+
+        if (id && name && webViewLink && iconLink) {
+          await File.updateMany(
+            { googleId: id },
+            {
+              googleId: id,
+              name,
+              webViewLink,
+              iconLink,
+            },
+            { upsert: true }
+          );
+        }
+      });
+      const Files = await File.find();
+      return Files;
     }
   },
 };
