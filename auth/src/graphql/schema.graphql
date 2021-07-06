@@ -1,7 +1,14 @@
+
+enum Roles {
+        student,
+        teacher
+    }
+
 type User {
     _id: ID
     username: String
     mail: String
+    role: Roles
 }
 
 type UserAndToken {
@@ -9,18 +16,24 @@ type UserAndToken {
     token: String
 }
 
+type Payload {
+    loggedIn: Boolean
+    role: Roles
+}
+
 type Query {
     users: [User]
 }
 
 type Mutation {
-    addUser(username: String!, mail: String!, password: String!) : UserAndToken
+    addUser(user: UserInput) : UserAndToken
     login(mail: String!, password: String!): UserAndToken
-    getAuthPayload(token: String!) : Boolean
+    getAuthPayload(token: String!) : Payload
 }
 
 input UserInput{
     username: String!
     mail: String!
     password: String!
+    role: Roles
 }
