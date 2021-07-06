@@ -30,7 +30,5 @@ type Query {
 type Mutation {
     addTag(tagInput: tagInput): FileAndTags
     deleteTag(tagInput: tagInput): FileAndTags
-    addTag(tagInput: tagInput): File
-    deleteTag(tagInput: tagInput): File
     createOrUpdate: [File]
 }
