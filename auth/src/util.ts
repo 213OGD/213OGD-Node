@@ -1,7 +1,9 @@
-/* eslint-disable @typescript-eslint/ban-types, consistent-return, @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-shadow */
+/* eslint-disable @typescript-eslint/ban-types, consistent-return, @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-shadow,@typescript-eslint/naming-convention
+ */
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 import bcrypt from 'bcryptjs';
+import { User } from './models/UserModel';
 
 export const encryptPassword = (password: string) =>
   new Promise((resolve, reject) => {
@@ -33,22 +35,21 @@ export const comparePassword = (password: string, hash: string) =>
     }
   });
 
-export const getToken = (payload: string | object | Buffer) => {
-  const token = jwt.sign({ payload }, `${process.env.SECRET_TOKEN}`, {
+export const getToken = (payload: object) => {
+  console.log(payload);
+  const token = jwt.sign(payload, `${process.env.SECRET_TOKEN}`, {
     expiresIn: 604800, // 1 Week
   });
   return token;
 };
 
-export const getPayload = (token: string) => {
-  try {
-    // Verify JWT Token
-    jwt.verify(token, `${process.env.SECRET_TOKEN}`);
-
-    return { loggedIn: true };
-  } catch (err) {
-    // Failed Login Status
-    // Add Err Message
+export const getPayload = async (
+  token: string
+): Promise<Record<string, boolean | string>> => {
+  const { _id }: any = jwt.verify(token, `${process.env.SECRET_TOKEN}`);
+  const user = await User.findOne({ _id });
+  if (!user) {
     return { loggedIn: false };
   }
+  return { loggedIn: true, role: user.role };
 };

@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, consistent-return, no-console */
-import { ApolloServer, gql } from 'apollo-server';
+/* eslint-disable @typescript-eslint/ban-types, consistent-return, @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-shadow, @typescript-eslint/ban-ts-comment */
+import { ApolloServer, AuthenticationError, gql } from 'apollo-server';
 import { buildFederatedSchema } from '@apollo/federation';
 import { readFileSync } from 'fs';
 import 'dotenv/config';
+import jwt from 'jsonwebtoken';
 import connect from './database/database';
 // import FileModels from './models/FileModels';
 import resolvers from './resolvers/resolver';
@@ -19,23 +20,41 @@ export type FileType = {
   tags: [string];
 };
 
+export const getPayload = (token: string): Record<string, boolean> => {
+  try {
+    // Verify JWT Token
+    jwt.verify(token, `${process.env.SECRET_TOKEN}`);
+
+    return { loggedIn: true };
+  } catch (err) {
+    // Failed Login Status
+    // Add Err Message
+    return { loggedIn: false };
+  }
+};
+
 const start = async () => {
-  const typeDefs = gql(
-    readFileSync('src/graphql/schema.graphql').toString('utf-8')
-  );
-
-  await connect(`${process.env.MONGO_URI}`);
-
-  const server = new ApolloServer({
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    schema: buildFederatedSchema([{ typeDefs, resolvers }]),
-  });
-
-  // The `listen` method launches a web server.
-  server.listen().then(({ url }) => {
-    console.log(`🚀 Server ready at ${url}`);
-  });
+  try {
+    const typeDefs = gql(
+      readFileSync('src/graphql/schema.graphql').toString('utf-8')
+    );
+    await connect(`${process.env.MONGO_URI}`);
+    const server = new ApolloServer({
+      // @ts-ignore
+      schema: buildFederatedSchema([{ typeDefs, resolvers }]),
+      context: ({ req }) => {
+        const { user } = req.headers;
+        return { user };
+      },
+    });
+    // The `listen` method launches a web server.
+    server.listen().then(({ url }) => {
+      console.log(`🚀 Server ready at ${url}`);
+    });
+  } catch (error) {
+    console.error(`Unable to start gateway: ${error.message}`);
+    process.exit(1);
+  }
 };
 
 start();

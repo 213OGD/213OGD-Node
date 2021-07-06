@@ -1,17 +1,58 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, consistent-return, no-console */
 import { File, FileDoc } from '../models/File';
+import FetchDrive from '../services/fetchDrive';
+
+const fetchDrive = new FetchDrive();
 
 const FileQuery = {
   async files(): Promise<FileDoc[]> {
     const files = await File.find();
-    console.log('files', files);
     return files;
   },
   async file(id: string): Promise<FileDoc[]> {
     const file = await File.find({ id });
-    console.log('file', file);
     return file;
   },
 };
 
-export default FileQuery;
+const FileMutation = {
+  /**
+   * get all files fron api google drive and update files in mongodb
+   *
+   * @param {*} _
+   * @param {*} __
+   * @param {*} context provided from apollo server
+   * @return {*}  {Promise<FileDoc[]>}
+   */
+  async createOrUpdate(
+    parent: any,
+    args: any,
+    context: any
+  ): Promise<FileDoc[]> {
+    const user = JSON.parse(context.user);
+    if (user.role !== 'teacher') {
+      throw Error('unauthorized request');
+    }
+    const files = await fetchDrive.listFiles();
+    files?.forEach(async (file) => {
+      const { id, name, webViewLink, iconLink } = file;
+
+      if (id && name && webViewLink && iconLink) {
+        await File.updateMany(
+          { googleId: id },
+          {
+            googleId: id,
+            name,
+            webViewLink,
+            iconLink,
+          },
+          { upsert: true }
+        );
+      }
+    });
+    const Files = await File.find();
+    return Files;
+  },
+};
+
+export { FileQuery, FileMutation };
