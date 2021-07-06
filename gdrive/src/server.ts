@@ -43,17 +43,8 @@ const start = async () => {
       // @ts-ignore
       schema: buildFederatedSchema([{ typeDefs, resolvers }]),
       context: ({ req }) => {
-        // const user = req.headers.user ? req.headers.user : null;
-        // console.log('user', user);
-        // if (typeof user === 'string') {
-        //   const { loggedIn } = getPayload(user);
-        //   console.log('loggedIn', loggedIn);
-        //   if (loggedIn === false) {
-        //     console.log("on passe par l'ereur");
-        //     // throw new AuthenticationError('you must be logged in');
-        //   }
-        // }
-        // return { user };
+        const { user } = req.headers;
+        return { user };
       },
     });
     // The `listen` method launches a web server.

@@ -20,6 +20,8 @@ spec:
               value: http://ogd213-gdrive-srv:4000
             - name: AUTH_URL
               value: http://ogd213-auth-srv:4000
+            - name: SECRET_TOKEN
+              value: supersecrettoken
 ---
 apiVersion: v1
 kind: Service
