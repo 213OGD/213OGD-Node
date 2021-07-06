@@ -26,7 +26,6 @@ const TagMutation = {
       { _id: idFile },
       { $addToSet: { tags: tag } },
       { new: true }
-      //  thow error
     );
     if (file === null) {
       throw new Error('Un problème est survenu');
