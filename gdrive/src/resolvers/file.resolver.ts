@@ -24,11 +24,7 @@ const FileMutation = {
    * @param {*} context provided from apollo server
    * @return {*}  {Promise<FileDoc[]>}
    */
-  async createOrUpdate(
-    parent: any,
-    args: any,
-    context: any
-  ): Promise<FileDoc[]> {
+  async createOrUpdate(_: any, __: any, context: any): Promise<FileDoc[]> {
     const user = JSON.parse(context.user);
     if (user.role !== 'teacher') {
       throw Error('unauthorized request');
