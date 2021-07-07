@@ -32,26 +32,27 @@ const FileMutation = {
     const user = JSON.parse(context.user);
     if (user.role !== 'teacher') {
       throw Error('unauthorized request');
-    }
-    const files = await fetchDrive.listFiles();
-    files?.forEach(async (file) => {
-      const { id, name, webViewLink, iconLink } = file;
+    } else {
+      const files = await fetchDrive.listFiles();
+      files?.forEach(async (file) => {
+        const { id, name, webViewLink, iconLink } = file;
 
-      if (id && name && webViewLink && iconLink) {
-        await File.updateMany(
-          { googleId: id },
-          {
-            googleId: id,
-            name,
-            webViewLink,
-            iconLink,
-          },
-          { upsert: true }
-        );
-      }
-    });
-    const Files = await File.find();
-    return Files;
+        if (id && name && webViewLink && iconLink) {
+          await File.updateMany(
+            { googleId: id },
+            {
+              googleId: id,
+              name,
+              webViewLink,
+              iconLink,
+            },
+            { upsert: true }
+          );
+        }
+      });
+      const Files = await File.find();
+      return Files;
+    }
   },
 };
 
