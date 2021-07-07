@@ -4,7 +4,7 @@
 
 Node v15.4.0
 
-# Prerequisites
+# Prerequisites 
 
 - Typescript `npm i -g typescript`
 - TS-node `npm i -g ts-node`
@@ -19,7 +19,7 @@ Node v15.4.0
 
 2. create `.env` in `./gdrive` & `./gateway` & `./auth` directories
 
-3. create `.credentials.json` in `./gdrive` directory
+3. create `.credentials.json` in `./gdrive/src` directory
 # Configure Database
 
 1. `npm i mongoose @types/mongoose`
