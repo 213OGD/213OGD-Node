@@ -23,7 +23,7 @@ const resolvers: ResolverMap = {
     },
   },
   User: {
-    id: ({ _id }) => {
+    _id: ({ _id }) => {
       return _id;
     },
   },
