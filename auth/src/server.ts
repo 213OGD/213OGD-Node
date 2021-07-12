@@ -2,6 +2,8 @@ import { ApolloServer, gql } from 'apollo-server';
 import { buildFederatedSchema } from '@apollo/federation';
 import 'dotenv/config';
 import { readFileSync } from 'fs';
+import { applyMiddleware } from 'graphql-middleware';
+import { AuthMiddleware } from '@mohakhlf/213ogdcommon';
 import { getPayload } from './util';
 
 import connect from './database/database';
@@ -14,14 +16,13 @@ const start = async () => {
     );
 
     await connect(`${process.env.MONGO_URI}`);
-
+    const schema = buildFederatedSchema([{ typeDefs, resolvers }]);
+    const schemaWithMiddle = applyMiddleware(schema, AuthMiddleware);
     const server = new ApolloServer({
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      schema: buildFederatedSchema([{ typeDefs, resolvers }]),
+      schema: schemaWithMiddle,
       context: async ({ req }) => {
-        const { user } = req.headers;
-        return { user };
+        const { user, url } = req.headers;
+        return { user, url };
       },
     });
     server.listen().then(({ url }) => {

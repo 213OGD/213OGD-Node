@@ -24,35 +24,56 @@ const FileMutation = {
    * @param {*} context provided from apollo server
    * @return {*}  {Promise<FileDoc[]>}
    */
-  async createOrUpdate(_: any, __: any, context: any): Promise<FileDoc[]> {
-    if (context && context.user) {
-      const user = JSON.parse(context.user);
-      if (user.role !== 'teacher') {
-        throw Error('unauthorized request');
-      } else {
-        const files = await fetchDrive.listFiles();
-        files?.forEach(async (file) => {
-          const { id, name, webViewLink, iconLink } = file;
+  // async createOrUpdate(_: any, __: any, context: any): Promise<FileDoc[]> {
+  //   if (context && context.user) {
+  //     const user = JSON.parse(context.user);
+  //     if (user.role !== 'teacher') {
+  //       throw Error('unauthorized request');
+  //     } else {
+  //       const files = await fetchDrive.listFiles();
+  //       files?.forEach(async (file) => {
+  //         const { id, name, webViewLink, iconLink } = file;
 
-          if (id && name && webViewLink && iconLink) {
-            await File.updateMany(
-              { googleId: id },
-              {
-                googleId: id,
-                name,
-                webViewLink,
-                iconLink,
-              },
-              { upsert: true }
-            );
-          }
-        });
-        const Files = await File.find();
-        return Files;
+  //         if (id && name && webViewLink && iconLink) {
+  //           await File.updateMany(
+  //             { googleId: id },
+  //             {
+  //               googleId: id,
+  //               name,
+  //               webViewLink,
+  //               iconLink,
+  //             },
+  //             { upsert: true }
+  //           );
+  //         }
+  //       });
+  //       const Files = await File.find();
+  //       return Files;
+  //     }
+  //   } else {
+  //     throw Error('unauthorized request');
+  //   }
+  // },
+  async createOrUpdate(_: any, __: any, context: any): Promise<FileDoc[]> {
+    const files = await fetchDrive.listFiles();
+    files?.forEach(async (file) => {
+      const { id, name, webViewLink, iconLink } = file;
+
+      if (id && name && webViewLink && iconLink) {
+        await File.updateMany(
+          { googleId: id },
+          {
+            googleId: id,
+            name,
+            webViewLink,
+            iconLink,
+          },
+          { upsert: true }
+        );
       }
-    } else {
-      throw Error('unauthorized request');
-    }
+    });
+    const Files = await File.find();
+    return Files;
   },
 };
 

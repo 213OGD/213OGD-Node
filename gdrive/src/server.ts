@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-types, consistent-return, @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-shadow, @typescript-eslint/ban-ts-comment */
-import { ApolloServer, AuthenticationError, gql } from 'apollo-server';
+import { ApolloServer, gql } from 'apollo-server';
 import { buildFederatedSchema } from '@apollo/federation';
 import { readFileSync } from 'fs';
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
+import { applyMiddleware } from 'graphql-middleware';
+import { FileMiddleware } from '@mohakhlf/213ogdcommon';
 import connect from './database/database';
 // import FileModels from './models/FileModels';
 import resolvers from './resolvers/resolver';
@@ -39,12 +41,13 @@ const start = async () => {
       readFileSync('src/graphql/schema.graphql').toString('utf-8')
     );
     await connect(`${process.env.MONGO_URI}`);
+    const schema = buildFederatedSchema([{ typeDefs, resolvers }]);
+    const schemaWithMiddle = applyMiddleware(schema, FileMiddleware);
     const server = new ApolloServer({
-      // @ts-ignore
-      schema: buildFederatedSchema([{ typeDefs, resolvers }]),
+      schema: schemaWithMiddle,
       context: ({ req }) => {
-        const { user } = req.headers;
-        return { user };
+        const { user, url } = req.headers;
+        return { user, url };
       },
     });
     // The `listen` method launches a web server.

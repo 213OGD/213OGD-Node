@@ -36,7 +36,6 @@ export const comparePassword = (password: string, hash: string) =>
   });
 
 export const getToken = (payload: object) => {
-  console.log(payload);
   const token = jwt.sign(payload, `${process.env.SECRET_TOKEN}`, {
     expiresIn: 604800, // 1 Week
   });

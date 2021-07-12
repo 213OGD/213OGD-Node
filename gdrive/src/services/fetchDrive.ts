@@ -34,7 +34,6 @@ export default class FetchDrive {
           fields: 'nextPageToken, files(id, name, webViewLink, iconLink)',
         },
         (err, res) => {
-          // console.log('res', res);
           if (err) {
             reject(err);
           } else {

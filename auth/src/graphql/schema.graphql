@@ -1,39 +1,38 @@
-
 enum Roles {
-        student,
-        teacher
-    }
+  student
+  teacher
+}
 
 type User {
-    _id: ID
-    username: String
-    mail: String
-    role: Roles
+  id: ID
+  username: String
+  mail: String
+  role: Roles
 }
 
 type UserAndToken {
-    user: User
-    token: String
+  user: User
+  token: String
 }
 
 type Payload {
-    loggedIn: Boolean
-    role: Roles
+  loggedIn: Boolean
+  role: Roles
 }
 
 type Query {
-    users: [User]
+  users: [User]
 }
 
 type Mutation {
-    addUser(user: UserInput) : UserAndToken
-    login(mail: String!, password: String!): UserAndToken
-    getAuthPayload(token: String!) : Payload
+  addUser(user: UserInput): UserAndToken
+  login(mail: String!, password: String!): UserAndToken
+  getAuthPayload(token: String!): Payload
 }
 
-input UserInput{
-    username: String!
-    mail: String!
-    password: String!
-    role: Roles
+input UserInput {
+  username: String!
+  mail: String!
+  password: String!
+  role: Roles
 }
