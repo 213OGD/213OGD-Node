@@ -58,7 +58,7 @@ const gateway = new ApolloGateway({
           }
           
         }
-       });
+      });
     server.listen().then(({ url }) => {
       console.log(`🚀 Gateway ready at ${url}`);
     })
