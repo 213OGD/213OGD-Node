@@ -1,5 +1,5 @@
 type File {
-    _id: String
+    id: String
     googleId: String
     name: String
     webViewLink: String
