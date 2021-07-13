@@ -65,3 +65,5 @@ PORT=*PORT* sh ./start_prod.sh
 ```
 
 ### Bien penser à ajouter le mail de service account au personne ayant acces au ficher
+
+### Pour pourvoir installer le package `@mohakhlf/common` il faut cree un `.npmrc` à la racine des dossiers auth et gdrive

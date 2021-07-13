@@ -20,5 +20,6 @@
   "homepage": "https://github.com/213OGD/213OGD-Node#readme",
   "devDependencies": {
     "husky": "^6.0.0"
-  }
+  },
+  "dependencies": {}
 }

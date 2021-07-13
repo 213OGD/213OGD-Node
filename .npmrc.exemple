@@ -1,0 +1,6 @@
+//npm.pkg.github.com/:_authToken=
+@mohakhlf:registry=https://npm.pkg.github.com/
+username=
+email=
+strict-ssl=false
+always-auth=true
