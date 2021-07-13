@@ -1,17 +1,7 @@
-const speedStyles = [
-  "color: green",
-  "background: yellow",
-  "font-size: 30px",
-  "border: 1px solid red",
-  "text-shadow: 2px 2px black",
-  "padding: 10px",
-].join(",");
-
 const speedRequest = {
   requestDidStart(requestContext: any) {
     const start = Date.now();
     let op: any;
-    console.log('request', requestContext.logger);
 
     return {
       didResolveOperation(context: any) {
@@ -21,8 +11,7 @@ const speedRequest = {
         const stop = Date.now();
         const elapsed = stop - start;
         const size = JSON.stringify(context.response).length * 2;
-        const msg = `Operation ${op} completed in ${elapsed} ms and returned ${size} bytes`;
-        console.log(`%c${msg}`, speedStyles);
+        console.log(`Operation ${op} completed in ${elapsed} ms and returned ${size} bytes \n\n`);
       },
     };
   },
