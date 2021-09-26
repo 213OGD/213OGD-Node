@@ -46,16 +46,16 @@ const TagMutation = {
     const { idFile, tag } = args.tagInput;
     const file = await File.findByIdAndUpdate(
       { _id: idFile },
-      { $pull: { tags: { $in: [tag] } } },
+      { $pull: { tags: tag.toLowerCase() } },
       { new: true }
     );
     if (file === null) {
       throw new Error('Un problème est survenu');
     }
 
-    const filesWithTag = await File.find({ tags: { $in: [tag] } });
+    const filesWithTag = await File.find({ tags: tag.toLowerCase() });
     if (filesWithTag.length === 0) {
-      await Tag.deleteOne({ name: tag });
+      await Tag.deleteOne({ name: tag.toLowerCase() });
     }
     const tags = await Tag.find();
     return { file, tags };
