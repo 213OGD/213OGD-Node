@@ -24,16 +24,16 @@ const TagMutation = {
 
     const file = await File.findOneAndUpdate(
       { _id: idFile },
-      { $addToSet: { tags: tag } },
+      { $addToSet: { tags: tag.toLowerCase() } },
       { new: true }
     );
     if (file === null) {
       throw new Error('Un problème est survenu');
     }
-    const isInTags = await Tag.find({ name: tag });
+    const isInTags = await Tag.find({ name: tag.toLowerCase() });
 
     if (isInTags.length === 0) {
-      const newTag = new Tag({ name: tag });
+      const newTag = new Tag({ name: tag.toLowerCase() });
       await newTag.save();
     }
     const tags = await Tag.find();
